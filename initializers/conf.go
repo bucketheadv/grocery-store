@@ -15,6 +15,7 @@ type Conf struct {
 }
 
 type XxlJobConf struct {
+	Enabled      bool   `json:"enabled"`
 	ServerAddr   string `json:"serverAddr"`
 	AccessToken  string `json:"accessToken"`
 	ExecutorPort string `json:"executorPort"`

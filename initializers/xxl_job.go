@@ -45,7 +45,9 @@ func init() {
 		return "OK"
 	})
 
-	go func() {
-		log.Println(exec.Run())
-	}()
+	if conf.Enabled {
+		go func() {
+			log.Println(exec.Run())
+		}()
+	}
 }

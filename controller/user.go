@@ -2,6 +2,7 @@ package controller
 
 import (
 	"HereWeGo/common"
+	"HereWeGo/db/model"
 	"HereWeGo/initializers"
 	"HereWeGo/service"
 	"errors"
@@ -28,8 +29,8 @@ func init() {
 			_ = c.Error(errors.New("查询数据失败, " + err.Error()))
 			return
 		}
-		common.ApiResponseOK(c, gin.H{
-			"data": user,
+		common.ApiResponseOk(c, common.Response[*model.User]{
+			Data: &user,
 		})
 	})
 
@@ -40,16 +41,16 @@ func init() {
 			_ = c.Error(errors.New("查询用户失败, " + err.Error()))
 			return
 		}
-		common.ApiResponseOK(c, gin.H{
-			"data": pageInfo,
+		common.ApiResponseOk(c, common.Response[*common.PageResult[model.User]]{
+			Data: &pageInfo,
 		})
 	})
 
 	group.GET("/Apollo", func(c *gin.Context) {
 		conf := initializers.ApolloClient.GetConfig("application")
 		var timeout = conf.GetIntValue("timeout", 0)
-		common.ApiResponseOK(c, gin.H{
-			"data": timeout,
+		common.ApiResponseOk(c, common.Response[int]{
+			Data: &timeout,
 		})
 	})
 }

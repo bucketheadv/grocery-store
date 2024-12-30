@@ -4,6 +4,7 @@ import (
 	_ "HereWeGo/controller"
 	"HereWeGo/initializers"
 	_ "HereWeGo/job"
+	_ "HereWeGo/middlewares"
 	"log"
 )
 

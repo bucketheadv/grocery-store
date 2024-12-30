@@ -23,5 +23,5 @@ func init() {
 }
 
 func Page(db *gorm.DB, page common.Page) *gorm.DB {
-	return db.Offset(page.Offset()).Limit(page.PageSize)
+	return db.Offset(page.Offset()).Limit(page.Limit())
 }

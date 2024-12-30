@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"HereWeGo/common"
 	"HereWeGo/initializers"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -10,6 +11,13 @@ func init() {
 	e := initializers.Engine
 	e.Use(globalPanicHandler())
 	e.Use(globalErrorHandler())
+	e.NoRoute(func(c *gin.Context) {
+		var response = common.Response[any]{
+			Code:    http.StatusNotFound,
+			Message: http.StatusText(http.StatusNotFound),
+		}
+		common.ApiResponseError(c, response)
+	})
 }
 
 func errorToString(r interface{}) string {
@@ -25,9 +33,11 @@ func globalPanicHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
 			if r := recover(); r != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"error": errorToString(r),
-				})
+				var response = common.Response[any]{
+					Code:    http.StatusInternalServerError,
+					Message: errorToString(r),
+				}
+				common.ApiResponseError(c, response)
 			}
 		}()
 		c.Next()
@@ -38,9 +48,11 @@ func globalErrorHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 		if len(c.Errors) > 0 {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": c.Errors.String(),
-			})
+			var response = common.Response[any]{
+				Code:    http.StatusInternalServerError,
+				Message: c.Errors.String(),
+			}
+			common.ApiResponseError(c, response)
 			c.Abort()
 			return
 		}

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"HereWeGo/config"
 	"HereWeGo/middlewares"
+	"HereWeGo/routers"
 	"github.com/gin-gonic/gin"
 	"log"
 )
@@ -13,8 +13,8 @@ import (
 func main() {
 	r := gin.Default()
 	middlewares.Load(r)
-	config.InitRouter(r)
-	if err := r.Run(":8080"); err != nil {
+	routers.InitRouter(r)
+	if err := r.Run(":5050"); err != nil {
 		log.Fatalf("端口启动监听失败: %s", err.Error())
 	}
 }

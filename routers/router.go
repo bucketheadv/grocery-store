@@ -1,4 +1,4 @@
-package config
+package routers
 
 import (
 	"HereWeGo/controller"

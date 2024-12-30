@@ -25,16 +25,10 @@ func (c *ApolloChangeListener) OnNewestChange(event *storage.FullChangeEvent) {
 var ApolloClient agollo.Client
 
 func init() {
-	conf := &config.AppConfig{
-		AppID:          "SampleApp",
-		Cluster:        "DEV",
-		IP:             "http://localhost:8080",
-		NamespaceName:  "application",
-		IsBackupConfig: true,
-	}
+	conf := GetConfig().Apollo
 
 	client, err := agollo.StartWithConfig(func() (*config.AppConfig, error) {
-		return conf, nil
+		return &conf, nil
 	})
 
 	if err != nil {

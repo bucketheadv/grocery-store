@@ -17,11 +17,12 @@ func (l *logger) Error(format string, a ...interface{}) {
 }
 
 func init() {
+	conf := GetConfig().XxlJob
 	exec := xxl.NewExecutor(
-		xxl.ServerAddr("http://localhost:9090"),
-		xxl.AccessToken("default_token"),
-		xxl.ExecutorPort("9999"),
-		xxl.RegistryKey("xxl-job-executor-sample"),
+		xxl.ServerAddr(conf.ServerAddr),
+		xxl.AccessToken(conf.AccessToken),
+		xxl.ExecutorPort(conf.ExecutorPort),
+		xxl.RegistryKey(conf.RegistryKey),
 		xxl.SetLogger(&logger{}),
 	)
 

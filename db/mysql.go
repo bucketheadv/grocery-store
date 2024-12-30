@@ -2,6 +2,7 @@ package db
 
 import (
 	"HereWeGo/common"
+	"HereWeGo/initializers"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -11,9 +12,9 @@ import (
 var DB *gorm.DB
 
 func init() {
+	conf := initializers.GetConfig().MySql
 	var err error
-	dsn := "root:123456@tcp(localhost:3306)/brian"
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+	DB, err = gorm.Open(mysql.Open(conf.Url), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {

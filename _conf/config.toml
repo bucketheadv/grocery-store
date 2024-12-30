@@ -1,0 +1,17 @@
+[mysql]
+url="root:123456@tcp(localhost:3306)/brian"
+
+[redis]
+addr="localhost:6379"
+
+[apollo]
+appId="SampleApp"
+cluster="DEV"
+ip="http://localhost:8080"
+namespaceName="application"
+
+[xxlJob]
+serverAddr="http://localhost:9090"
+accessToken="default_token"
+executorPort="9999"
+registryKey="xxl-job-executor-sample"

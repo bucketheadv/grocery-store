@@ -13,7 +13,7 @@ func (l *logger) Info(format string, a ...interface{}) {
 }
 
 func (l *logger) Error(format string, a ...interface{}) {
-	log.Fatalf("自定义日志 - "+format, a...)
+	log.Printf("自定义日志 - "+format, a...)
 }
 
 func init() {
@@ -46,6 +46,6 @@ func init() {
 	})
 
 	go func() {
-		log.Fatal(exec.Run())
+		log.Println(exec.Run())
 	}()
 }

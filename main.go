@@ -1,9 +1,9 @@
 package main
 
 import (
-	"HereWeGo/middlewares"
-	"HereWeGo/routers"
-	"github.com/gin-gonic/gin"
+	_ "HereWeGo/controller"
+	"HereWeGo/initializers"
+	_ "HereWeGo/job"
 	"log"
 )
 
@@ -11,9 +11,7 @@ import (
 // the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
 
 func main() {
-	r := gin.Default()
-	middlewares.Load(r)
-	routers.InitRouter(r)
+	r := initializers.Engine
 	if err := r.Run(":5050"); err != nil {
 		log.Fatalf("端口启动监听失败: %s", err.Error())
 	}

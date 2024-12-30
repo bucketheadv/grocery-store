@@ -3,7 +3,7 @@ package service
 import (
 	"HereWeGo/common"
 	"HereWeGo/db"
-	"HereWeGo/model"
+	"HereWeGo/db/model"
 	"fmt"
 	"log"
 )
@@ -22,7 +22,7 @@ func GetUser(id int) (*model.User, error) {
 	return &data, nil
 }
 
-func UserByPage(page common.BasePage) (*common.Page[model.User], error) {
+func UserByPage(page common.Page) (*common.PageResult[model.User], error) {
 	var key = fmt.Sprintf("cache:page:%d:%d", page.PageNo, page.PageSize)
 	var data = db.CacheByKey(key, func() *[]model.User {
 		var users *[]model.User
@@ -34,7 +34,7 @@ func UserByPage(page common.BasePage) (*common.Page[model.User], error) {
 		defer rows.Close()
 		return users
 	})
-	pageInfo := &common.Page[model.User]{
+	pageInfo := &common.PageResult[model.User]{
 		PageNo:   page.PageNo,
 		PageSize: page.PageSize,
 		Records:  *data,

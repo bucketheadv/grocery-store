@@ -1,7 +1,6 @@
 package initializers
 
 import (
-	"context"
 	"github.com/xxl-job/xxl-job-executor-go"
 	"log"
 )
@@ -16,9 +15,15 @@ func (l *logger) Error(format string, a ...interface{}) {
 	log.Printf("自定义日志 - "+format, a...)
 }
 
+var exec xxl.Executor
+
 func init() {
 	conf := GetConfig().XxlJob
-	exec := xxl.NewExecutor(
+	if !conf.Enabled {
+		return
+	}
+
+	exec = xxl.NewExecutor(
 		xxl.ServerAddr(conf.ServerAddr),
 		xxl.AccessToken(conf.AccessToken),
 		xxl.ExecutorPort(conf.ExecutorPort),
@@ -27,10 +32,11 @@ func init() {
 	)
 
 	exec.Init()
+
 	exec.LogHandler(func(req *xxl.LogReq) *xxl.LogRes {
 		return &xxl.LogRes{
 			Code: 200,
-			Msg:  "",
+			Msg:  "测试消息",
 			Content: xxl.LogResContent{
 				FromLineNum: req.FromLineNum,
 				ToLineNum:   2,
@@ -40,14 +46,13 @@ func init() {
 		}
 	})
 
-	exec.RegTask("demoJobHandler", func(cxt context.Context, param *xxl.RunReq) string {
-		log.Println("正在执行xxl-job任务")
-		return "OK"
-	})
+	go func() {
+		log.Println(exec.Run())
+	}()
+}
 
-	if conf.Enabled {
-		go func() {
-			log.Println(exec.Run())
-		}()
+func RegTask(pattern string, taskFunc xxl.TaskFunc) {
+	if exec != nil {
+		exec.RegTask(pattern, taskFunc)
 	}
 }

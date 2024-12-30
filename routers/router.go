@@ -1,10 +1,15 @@
 package routers
 
 import (
-	"HereWeGo/controller"
+	"HereWeGo/initializers"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
+
+func init() {
+	e := initializers.Engine
+	InitRouter(e)
+}
 
 func InitRouter(r *gin.Engine) {
 	r.NoRoute(func(c *gin.Context) {
@@ -12,6 +17,4 @@ func InitRouter(r *gin.Engine) {
 			"error": "404 Not Found",
 		})
 	})
-
-	controller.UserController(r)
 }

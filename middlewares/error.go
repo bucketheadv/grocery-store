@@ -1,9 +1,16 @@
 package middlewares
 
 import (
+	"HereWeGo/initializers"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
+
+func init() {
+	e := initializers.Engine
+	e.Use(globalPanicHandler())
+	e.Use(globalErrorHandler())
+}
 
 func errorToString(r interface{}) string {
 	switch v := r.(type) {
@@ -38,9 +45,4 @@ func globalErrorHandler() gin.HandlerFunc {
 			return
 		}
 	}
-}
-
-func Load(e *gin.Engine) {
-	e.Use(globalPanicHandler())
-	e.Use(globalErrorHandler())
 }

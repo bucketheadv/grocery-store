@@ -6,18 +6,18 @@ import (
 	"strconv"
 )
 
-type BasePage struct {
+type Page struct {
 	PageNo   int `json:"page" default:"1"`
 	PageSize int `json:"pageSize" default:"10"`
 }
 
-type Page[T schema.Tabler] struct {
+type PageResult[T schema.Tabler] struct {
 	PageNo   int `json:"page"`
 	PageSize int `json:"pageSize"`
 	Records  []T `json:"records"`
 }
 
-func (p *BasePage) Offset() int {
+func (p *Page) Offset() int {
 	var offset int
 	if p.PageNo == 0 || p.PageNo == 1 {
 		return 0
@@ -26,11 +26,11 @@ func (p *BasePage) Offset() int {
 	return offset
 }
 
-func (p *Page[T]) SetRecords(records []T) {
+func (p *PageResult[T]) SetRecords(records []T) {
 	p.Records = records
 }
 
-func ParsePageParams(c *gin.Context) BasePage {
+func ParsePageParams(c *gin.Context) Page {
 	var page = 1
 	var limit = 10
 	if pageNo, success := c.GetQuery("pageNo"); success {
@@ -44,7 +44,7 @@ func ParsePageParams(c *gin.Context) BasePage {
 			limit = p
 		}
 	}
-	return BasePage{
+	return Page{
 		PageNo: page, PageSize: limit,
 	}
 }

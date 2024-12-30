@@ -5,9 +5,9 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-var RedisTemplateClient *redis.Client
+var RedisClient *redis.Client
 
 func init() {
 	conf := initializers.GetConfig().Redis
-	RedisTemplateClient = redis.NewClient(&conf)
+	RedisClient = redis.NewClient(&conf)
 }

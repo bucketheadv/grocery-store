@@ -9,7 +9,8 @@ import (
 	"strconv"
 )
 
-func UserController(r *gin.Engine) {
+func init() {
+	r := initializers.Engine
 	group := r.Group("/User")
 	group.GET("/GetById", func(c *gin.Context) {
 		id, success := c.GetQuery("id")

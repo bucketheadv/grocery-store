@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "HereWeGo/consumer"
 	_ "HereWeGo/controller"
 	"HereWeGo/initializers"
 	_ "HereWeGo/job"

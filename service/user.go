@@ -35,9 +35,8 @@ func UserByPage(page common.Page) (*common.PageResult[model.User], error) {
 		return users
 	})
 	pageInfo := &common.PageResult[model.User]{
-		PageNo:   page.PageNo,
-		PageSize: page.PageSize,
-		Records:  *data,
+		Page:    page,
+		Records: *data,
 	}
 	return pageInfo, nil
 }

@@ -7,14 +7,13 @@ import (
 )
 
 type Page struct {
-	PageNo   int `json:"pageNo" default:"1"`
+	PageNo   int `json:"page" default:"1"`
 	PageSize int `json:"pageSize" default:"10"`
 }
 
 type PageResult[T schema.Tabler] struct {
-	PageNo   int `json:"pageNo"`
-	PageSize int `json:"pageSize"`
-	Records  []T `json:"records"`
+	Page
+	Records []T `json:"records"`
 }
 
 func (p *Page) Offset() int {

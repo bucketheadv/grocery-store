@@ -8,10 +8,11 @@ import (
 )
 
 type Conf struct {
-	Apollo config.AppConfig `json:"apollo"`
-	XxlJob XxlJobConf       `json:"xxlJob"`
-	MySql  MySqlConf        `json:"mysql"`
-	Redis  redis.Options    `json:"redis"`
+	Apollo   config.AppConfig `json:"apollo"`
+	XxlJob   XxlJobConf       `json:"xxlJob"`
+	MySql    MySqlConf        `json:"mysql"`
+	Redis    redis.Options    `json:"redis"`
+	RocketMQ RocketMQConf     `json:"rocketMq"`
 }
 
 type XxlJobConf struct {
@@ -28,6 +29,11 @@ type MySqlConf struct {
 
 type RedisConf struct {
 	Url string `json:"url"`
+}
+
+type RocketMQConf struct {
+	Enabled    bool     `json:"enabled"`
+	NameServer []string `json:"nameServer"`
 }
 
 var conf *Conf

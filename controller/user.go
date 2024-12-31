@@ -6,7 +6,11 @@ import (
 	"HereWeGo/initializers"
 	"HereWeGo/service"
 	"errors"
+	"fmt"
+	"github.com/apache/rocketmq-client-go/v2/primitive"
 	"github.com/gin-gonic/gin"
+	"log"
+	"math/rand"
 	"strconv"
 )
 
@@ -51,6 +55,20 @@ func init() {
 		var timeout = conf.GetIntValue("timeout", 0)
 		common.ApiResponseOk(c, common.Response[int]{
 			Data: &timeout,
+		})
+	})
+
+	group.GET("/SendMqMsg", func(c *gin.Context) {
+		var msg = fmt.Sprintf("测试数据 %d", rand.Int())
+		_, err := initializers.SyncSendMsg(&primitive.Message{
+			Topic: initializers.DemoTopic,
+			Body:  []byte(msg),
+		})
+		if err != nil {
+			log.Println(err)
+		}
+		common.ApiResponseOk(c, common.Response[*model.User]{
+			Data: nil,
 		})
 	})
 }

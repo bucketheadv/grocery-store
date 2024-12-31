@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/shopspring/decimal"
 	"net/http"
 	"sort"
 )
@@ -33,17 +34,17 @@ func ApiResponse[T any](c *gin.Context, response Response[T]) {
 
 type Person struct {
 	Name string
-	Age  int
+	Age  decimal.Decimal
 }
 
 func SortByPeopleAge() {
 	people := []Person{
-		{"Alice", 30},
-		{"Bob", 25},
-		{"Charlie", 35},
+		{"Alice", decimal.NewFromInt(30)},
+		{"Bob", decimal.NewFromInt(25)},
+		{"Charlie", decimal.NewFromInt(35)},
 	}
 	sort.Slice(people, func(i, j int) bool {
-		return people[i].Age < people[j].Age
+		return people[i].Age.Compare(people[j].Age) < 0
 	})
 
 	fmt.Println(people)

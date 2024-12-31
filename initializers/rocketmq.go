@@ -2,6 +2,7 @@ package initializers
 
 import (
 	"context"
+	"errors"
 	"github.com/apache/rocketmq-client-go/v2"
 	"github.com/apache/rocketmq-client-go/v2/admin"
 	"github.com/apache/rocketmq-client-go/v2/consumer"
@@ -16,12 +17,11 @@ var RocketMqConsumer rocketmq.PushConsumer
 var DemoTopic = "demo_topic"
 
 func init() {
-	initProducer()
 	conf := GetConfig().RocketMQ
 	if !conf.Enabled {
 		return
 	}
-	createTopic(DemoTopic)
+	initProducer()
 	initConsumer()
 }
 
@@ -63,6 +63,10 @@ func initConsumer() {
 }
 
 func SyncSendMsg(msg *primitive.Message) (*primitive.SendResult, error) {
+	conf := GetConfig().RocketMQ
+	if !conf.Enabled {
+		return nil, errors.New("RocketMQ not enabled")
+	}
 	return RocketMqProducer.SendSync(context.Background(), msg)
 }
 

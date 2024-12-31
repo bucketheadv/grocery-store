@@ -1,8 +1,8 @@
 package main
 
 import (
+	_ "HereWeGo/api"
 	_ "HereWeGo/consumer"
-	_ "HereWeGo/controller"
 	"HereWeGo/initializers"
 	_ "HereWeGo/job"
 	_ "HereWeGo/middlewares"

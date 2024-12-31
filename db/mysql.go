@@ -3,6 +3,7 @@ package db
 import (
 	"HereWeGo/common"
 	"HereWeGo/initializers"
+	"database/sql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -24,4 +25,11 @@ func init() {
 
 func Page(db *gorm.DB, page common.Page) *gorm.DB {
 	return db.Offset(page.Offset()).Limit(page.Limit())
+}
+
+func CloseRows(rows *sql.Rows) {
+	err := rows.Close()
+	if err != nil {
+		log.Println(err)
+	}
 }

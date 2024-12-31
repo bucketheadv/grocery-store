@@ -18,5 +18,5 @@ executorPort="9999"
 registryKey="xxl-job-executor-sample"
 
 [rocketMq]
-enabled=true
+enabled=false
 nameServer=["192.168.110.107:9876"]

@@ -7,8 +7,8 @@ import (
 )
 
 type Page struct {
-	PageNo   int `json:"page" default:"1"`
-	PageSize int `json:"pageSize" default:"10"`
+	PageNo   int `json:"page"`
+	PageSize int `json:"pageSize"`
 }
 
 type PageResult[T schema.Tabler] struct {

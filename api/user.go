@@ -1,7 +1,7 @@
 package api
 
 import (
-	"HereWeGo/common"
+	"HereWeGo/core"
 	"HereWeGo/db/model"
 	"HereWeGo/initializers"
 	"HereWeGo/service"
@@ -34,20 +34,20 @@ func init() {
 			_ = c.Error(errors.New("查询数据失败, " + err.Error()))
 			return
 		}
-		common.ApiResponseOk(c, common.Response[*model.User]{
-			Data: &user,
+		core.ApiResponseOk(c, core.Response[*model.User]{
+			Data: user,
 		})
 	})
 
 	group.GET("/Query", func(c *gin.Context) {
-		page := common.ParsePageParams(c)
+		page := core.ParsePageParams(c)
 		pageInfo, err := service.UserByPage(page)
 		if err != nil {
 			_ = c.Error(errors.New("查询用户失败, " + err.Error()))
 			return
 		}
-		common.ApiResponseOk(c, common.Response[*common.PageResult[model.User]]{
-			Data: &pageInfo,
+		core.ApiResponseOk(c, core.Response[core.PageResult[model.User]]{
+			Data: pageInfo,
 		})
 	})
 
@@ -58,16 +58,16 @@ func init() {
 			idsInt[i], _ = strconv.Atoi(id)
 		}
 		users, _ := service.GetUsers(idsInt)
-		common.ApiResponseOk(c, common.Response[[]model.User]{
-			Data: &users,
+		core.ApiResponseOk(c, core.Response[[]model.User]{
+			Data: users,
 		})
 	})
 
 	group.GET("/Apollo", func(c *gin.Context) {
 		conf := initializers.ApolloClient.GetConfig("application")
 		var timeout = conf.GetIntValue("timeout", 0)
-		common.ApiResponseOk(c, common.Response[int]{
-			Data: &timeout,
+		core.ApiResponseOk(c, core.Response[int]{
+			Data: timeout,
 		})
 	})
 
@@ -80,7 +80,7 @@ func init() {
 		if err != nil {
 			logrus.Error(err)
 		}
-		common.ApiResponseOk(c, common.Response[*model.User]{
+		core.ApiResponseOk(c, core.Response[*model.User]{
 			Data: nil,
 		})
 	})

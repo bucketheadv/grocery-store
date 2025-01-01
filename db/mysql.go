@@ -1,7 +1,7 @@
 package db
 
 import (
-	"HereWeGo/common"
+	"HereWeGo/core"
 	"HereWeGo/initializers"
 	"database/sql"
 	"github.com/sirupsen/logrus"
@@ -23,7 +23,7 @@ func init() {
 	}
 }
 
-func Page(db *gorm.DB, page common.Page) *gorm.DB {
+func Page(db *gorm.DB, page core.Page) *gorm.DB {
 	return db.Offset(page.Offset()).Limit(page.Limit())
 }
 

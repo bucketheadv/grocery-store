@@ -5,7 +5,7 @@ import (
 	"HereWeGo/db"
 	"HereWeGo/db/model"
 	"fmt"
-	"log"
+	"github.com/sirupsen/logrus"
 	"slices"
 	"time"
 )
@@ -75,7 +75,7 @@ func UserByPage(page common.Page) (*common.PageResult[model.User], error) {
 		var users *[]model.User
 		rows, err := db.Page(db.DB, page).Find(&users).Rows()
 		if err != nil {
-			log.Println("查询数据失败, ", err.Error())
+			logrus.Error("查询数据失败, ", err.Error())
 			return nil
 		}
 		defer db.CloseRows(rows)

@@ -1,18 +1,18 @@
 package initializers
 
 import (
+	"github.com/sirupsen/logrus"
 	"github.com/xxl-job/xxl-job-executor-go"
-	"log"
 )
 
 type logger struct{}
 
 func (l *logger) Info(format string, a ...interface{}) {
-	log.Printf("自定义日志 - "+format, a...)
+	logrus.Printf("自定义日志 - "+format, a...)
 }
 
 func (l *logger) Error(format string, a ...interface{}) {
-	log.Printf("自定义日志 - "+format, a...)
+	logrus.Printf("自定义日志 - "+format, a...)
 }
 
 var exec xxl.Executor
@@ -47,7 +47,7 @@ func init() {
 	})
 
 	go func() {
-		log.Println(exec.Run())
+		logrus.Error(exec.Run())
 	}()
 }
 

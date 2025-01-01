@@ -4,21 +4,21 @@ import (
 	"github.com/apolloconfig/agollo/v4"
 	"github.com/apolloconfig/agollo/v4/env/config"
 	"github.com/apolloconfig/agollo/v4/storage"
-	"log"
+	"github.com/sirupsen/logrus"
 )
 
 type ApolloChangeListener struct{}
 
 func (c *ApolloChangeListener) OnChange(event *storage.ChangeEvent) {
 	for k, v := range event.Changes {
-		log.Printf("apollo %v config changed, key: %v, old value: %v, new value: %v\n",
+		logrus.Infof("apollo %v config changed, key: %v, old value: %v, new value: %v",
 			event.Namespace, k, v.OldValue, v.NewValue)
 	}
 }
 
 func (c *ApolloChangeListener) OnNewestChange(event *storage.FullChangeEvent) {
 	for k, v := range event.Changes {
-		log.Printf("apollo config pull, key: %s, value: %v\n", k, v)
+		logrus.Infof("apollo config pull, key: %s, value: %v", k, v)
 	}
 }
 
@@ -32,12 +32,12 @@ func init() {
 	})
 
 	if err != nil {
-		log.Printf("初始化Apollo失败, %s\n", err.Error())
+		logrus.Infof("初始化Apollo失败, %s", err.Error())
 		return
 	}
 
 	client.AddChangeListener(&ApolloChangeListener{})
 	ApolloClient = client
 
-	log.Println("初始化Apollo成功")
+	logrus.Infof("初始化Apollo成功")
 }

@@ -4,10 +4,10 @@ import (
 	"HereWeGo/common"
 	"HereWeGo/initializers"
 	"database/sql"
+	"github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"log"
 )
 
 var DB *gorm.DB
@@ -19,7 +19,7 @@ func init() {
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
-		log.Fatalln(err)
+		logrus.Fatalln(err)
 	}
 }
 
@@ -30,6 +30,6 @@ func Page(db *gorm.DB, page common.Page) *gorm.DB {
 func CloseRows(rows *sql.Rows) {
 	err := rows.Close()
 	if err != nil {
-		log.Println(err)
+		logrus.Println(err)
 	}
 }

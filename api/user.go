@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
 	"github.com/gin-gonic/gin"
-	"log"
+	"github.com/sirupsen/logrus"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -78,7 +78,7 @@ func init() {
 			Body:  []byte(msg),
 		})
 		if err != nil {
-			log.Println(err)
+			logrus.Error(err)
 		}
 		common.ApiResponseOk(c, common.Response[*model.User]{
 			Data: nil,

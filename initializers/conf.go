@@ -4,7 +4,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/apolloconfig/agollo/v4/env/config"
 	"github.com/go-redis/redis/v8"
-	"log"
+	"github.com/sirupsen/logrus"
 )
 
 type Conf struct {
@@ -41,7 +41,7 @@ var conf *Conf
 func GetConfig() *Conf {
 	if conf == nil {
 		if _, err := toml.DecodeFile("_conf/config.toml", &conf); err != nil {
-			log.Fatal(err)
+			logrus.Fatal(err)
 		}
 	}
 	return conf

@@ -8,7 +8,7 @@ import (
 	"github.com/apache/rocketmq-client-go/v2/consumer"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
 	"github.com/apache/rocketmq-client-go/v2/producer"
-	"log"
+	"github.com/sirupsen/logrus"
 )
 
 var RocketMqProducer rocketmq.Producer
@@ -34,11 +34,11 @@ func initProducer() {
 		producer.WithGroupName("default"),
 	)
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 	err = prod.Start()
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 	RocketMqProducer = prod
 }
@@ -53,11 +53,11 @@ func initConsumer() {
 		consumer.WithGroupName("default"),
 	)
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 	err = consume.Start()
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 	RocketMqConsumer = consume
 }
@@ -74,11 +74,11 @@ func createTopic(topic string) {
 	conf := GetConfig().RocketMQ
 	h, err := admin.NewAdmin(admin.WithResolver(primitive.NewPassthroughResolver(conf.NameServer)))
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 	err = h.CreateTopic(context.Background(), admin.WithTopicCreate(topic))
 	if err != nil {
-		log.Println(err)
+		logrus.Println(err)
 	}
 }
 
@@ -90,10 +90,10 @@ func RegConsumer(topic string, f func(context.Context, ...*primitive.MessageExt)
 	c := RocketMqConsumer
 	err := c.Subscribe(topic, consumer.MessageSelector{}, f)
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 	err = c.Start()
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 }

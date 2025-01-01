@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 	"encoding/json"
-	"log"
+	"github.com/sirupsen/logrus"
 	"reflect"
 	"time"
 )
@@ -58,12 +58,12 @@ func SetCache(key string, value any, ttl time.Duration) {
 	} else {
 		data, err := json.Marshal(value)
 		if err != nil {
-			log.Println(err)
+			logrus.Error(err)
 		}
 		s = string(data)
 	}
 	result := redisClient.Set(ctx, key, s, ttl)
 	if result.Err() != nil {
-		log.Println(result.Err())
+		logrus.Error(result.Err())
 	}
 }

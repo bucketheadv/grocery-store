@@ -6,7 +6,7 @@ import (
 	"HereWeGo/initializers"
 	_ "HereWeGo/job"
 	_ "HereWeGo/middlewares"
-	"log"
+	"github.com/sirupsen/logrus"
 )
 
 //TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
@@ -15,6 +15,6 @@ import (
 func main() {
 	r := initializers.Engine
 	if err := r.Run(":5050"); err != nil {
-		log.Fatalf("端口启动监听失败: %s", err.Error())
+		logrus.Fatalf("端口启动监听失败: %s", err.Error())
 	}
 }

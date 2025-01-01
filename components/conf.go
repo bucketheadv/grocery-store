@@ -1,4 +1,4 @@
-package initializers
+package components
 
 import (
 	"github.com/BurntSushi/toml"
@@ -21,6 +21,8 @@ type XxlJobConf struct {
 	AccessToken  string `json:"accessToken"`
 	ExecutorPort string `json:"executorPort"`
 	RegistryKey  string `json:"registryKey"`
+	LogDir       string `json:"logDir"`
+	LogRetention int    `json:"logRetention"`
 }
 
 type MySqlConf struct {

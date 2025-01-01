@@ -1,13 +1,13 @@
 package db
 
 import (
-	"HereWeGo/initializers"
+	"HereWeGo/components"
 	"github.com/go-redis/redis/v8"
 )
 
 var RedisClient *redis.Client
 
 func init() {
-	conf := initializers.GetConfig().Redis
+	conf := components.GetConfig().Redis
 	RedisClient = redis.NewClient(&conf)
 }

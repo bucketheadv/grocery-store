@@ -1,8 +1,8 @@
 package db
 
 import (
+	"HereWeGo/components"
 	"HereWeGo/core"
-	"HereWeGo/initializers"
 	"database/sql"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
@@ -13,7 +13,7 @@ import (
 var DB *gorm.DB
 
 func init() {
-	conf := initializers.GetConfig().MySql
+	conf := components.GetConfig().MySql
 	var err error
 	DB, err = gorm.Open(mysql.Open(conf.Url), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),

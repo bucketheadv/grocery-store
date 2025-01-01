@@ -16,6 +16,8 @@ serverAddr="http://localhost:9090"
 accessToken="default_token"
 executorPort="9999"
 registryKey="xxl-job-executor-sample"
+logDir="/Users/sven/Downloads/xxl-job-log"
+logRetention=7
 
 [rocketMq]
 enabled=false

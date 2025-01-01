@@ -1,4 +1,4 @@
-package initializers
+package components
 
 import (
 	"github.com/apolloconfig/agollo/v4"

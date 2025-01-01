@@ -1,9 +1,9 @@
 package api
 
 import (
+	"HereWeGo/components"
 	"HereWeGo/core"
 	"HereWeGo/db/model"
-	"HereWeGo/initializers"
 	"HereWeGo/service"
 	"errors"
 	"fmt"
@@ -16,7 +16,7 @@ import (
 )
 
 func init() {
-	r := initializers.Engine
+	r := components.Engine
 	group := r.Group("/User")
 	group.GET("/GetById", func(c *gin.Context) {
 		id, success := c.GetQuery("id")
@@ -64,7 +64,7 @@ func init() {
 	})
 
 	group.GET("/Apollo", func(c *gin.Context) {
-		conf := initializers.ApolloClient.GetConfig("application")
+		conf := components.ApolloClient.GetConfig("application")
 		var timeout = conf.GetIntValue("timeout", 0)
 		core.ApiResponseOk(c, core.Response[int]{
 			Data: timeout,
@@ -73,8 +73,8 @@ func init() {
 
 	group.GET("/SendMqMsg", func(c *gin.Context) {
 		var msg = fmt.Sprintf("测试数据 %d", rand.Int())
-		_, err := initializers.SyncSendMsg(&primitive.Message{
-			Topic: initializers.DemoTopic,
+		_, err := components.SyncSendMsg(&primitive.Message{
+			Topic: components.DemoTopic,
 			Body:  []byte(msg),
 		})
 		if err != nil {

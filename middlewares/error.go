@@ -1,14 +1,14 @@
 package middlewares
 
 import (
+	"HereWeGo/components"
 	"HereWeGo/core"
-	"HereWeGo/initializers"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func init() {
-	e := initializers.Engine
+	e := components.Engine
 	e.Use(globalPanicHandler())
 	e.Use(globalErrorHandler())
 	e.NoRoute(func(c *gin.Context) {

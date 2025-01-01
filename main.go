@@ -2,8 +2,8 @@ package main
 
 import (
 	_ "HereWeGo/api"
+	"HereWeGo/components"
 	_ "HereWeGo/consumer"
-	"HereWeGo/initializers"
 	_ "HereWeGo/job"
 	_ "HereWeGo/middlewares"
 	"github.com/sirupsen/logrus"
@@ -13,7 +13,7 @@ import (
 // the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
 
 func main() {
-	r := initializers.Engine
+	r := components.Engine
 	if err := r.Run(":5050"); err != nil {
 		logrus.Fatalf("端口启动监听失败: %s", err.Error())
 	}

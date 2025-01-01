@@ -17,7 +17,7 @@ const (
 
 func GetUser(id int) (*model.User, error) {
 	var key = fmt.Sprintf(userCacheKey, id)
-	var data = db.CacheByKey(key, func() model.User {
+	var data = db.FetchCache(key, 5*time.Minute, func() model.User {
 		var user model.User
 		rows, err := db.DB.Where("id = ?", id).Find(&user).Rows()
 		if err != nil {
@@ -71,7 +71,7 @@ func GetUsers(ids []int) ([]model.User, error) {
 
 func UserByPage(page core.Page) (core.PageResult[model.User], error) {
 	var key = fmt.Sprintf(userPageCacheKey, page.PageNo, page.PageSize)
-	var data = db.CacheByKey(key, func() *[]model.User {
+	var data = db.FetchCache(key, 5*time.Minute, func() *[]model.User {
 		var users *[]model.User
 		rows, err := db.Page(db.DB, page).Find(&users).Rows()
 		if err != nil {

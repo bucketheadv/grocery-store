@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func CacheByKey[T any](key string, function func() T) T {
+func FetchCache[T any](key string, ttl time.Duration, function func() T) T {
 	var redisClient = RedisClient
 	var ctx = context.Background()
 	value := redisClient.Get(ctx, key)
@@ -25,7 +25,7 @@ func CacheByKey[T any](key string, function func() T) T {
 	if err != nil {
 		panic(err)
 	}
-	redisClient.Set(ctx, key, bytes, time.Duration(300)*time.Second)
+	redisClient.Set(ctx, key, bytes, ttl)
 	return result
 }
 
@@ -39,8 +39,7 @@ func GetCaches[T any](keys []string) []T {
 			continue
 		}
 		var ret T
-		var s = v.(string)
-		err := json.Unmarshal(([]byte)(s), &ret)
+		err := json.Unmarshal(([]byte)(v.(string)), &ret)
 		if err != nil {
 			panic(err)
 		}

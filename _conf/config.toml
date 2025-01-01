@@ -1,3 +1,6 @@
+[server]
+port=5050
+
 [mysql]
 url="root:123456@tcp(localhost:3306)/brian"
 
@@ -5,6 +8,7 @@ url="root:123456@tcp(localhost:3306)/brian"
 addr="localhost:6379"
 
 [apollo]
+enabled=true
 appId="SampleApp"
 cluster="DEV"
 ip="http://localhost:8080"
@@ -19,6 +23,6 @@ registryKey="xxl-job-executor-sample"
 logDir="/Users/sven/Downloads/xxl-job-log"
 logRetention=7
 
-[rocketMq]
+[rocketMQ]
 enabled=false
 nameServer=["192.168.110.107:9876"]

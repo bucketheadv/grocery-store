@@ -3,9 +3,11 @@ package main
 import (
 	_ "HereWeGo/api"
 	"HereWeGo/components"
+	"HereWeGo/conf"
 	_ "HereWeGo/consumer"
 	_ "HereWeGo/job"
 	_ "HereWeGo/middlewares"
+	"fmt"
 	"github.com/sirupsen/logrus"
 )
 
@@ -14,7 +16,8 @@ import (
 
 func main() {
 	r := components.Engine
-	if err := r.Run(":5050"); err != nil {
+	var port = fmt.Sprintf(":%d", conf.Config.Server.Port)
+	if err := r.Run(port); err != nil {
 		logrus.Fatalf("端口启动监听失败: %s", err.Error())
 	}
 }

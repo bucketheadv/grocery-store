@@ -2,6 +2,7 @@ package api
 
 import (
 	"HereWeGo/components"
+	"HereWeGo/conf"
 	"HereWeGo/core"
 	"HereWeGo/db/model"
 	"HereWeGo/service"
@@ -64,7 +65,7 @@ func init() {
 	})
 
 	group.GET("/Apollo", func(c *gin.Context) {
-		config := components.ApolloClient.GetConfig("application")
+		config := conf.ApolloClient.GetConfig("application")
 		var timeout = config.GetIntValue("timeout", 0)
 		core.ApiResponseOk(c, core.Response[int]{
 			Data: timeout,

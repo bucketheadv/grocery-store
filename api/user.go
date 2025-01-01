@@ -12,6 +12,7 @@ import (
 	"log"
 	"math/rand"
 	"strconv"
+	"strings"
 )
 
 func init() {
@@ -47,6 +48,18 @@ func init() {
 		}
 		common.ApiResponseOk(c, common.Response[*common.PageResult[model.User]]{
 			Data: &pageInfo,
+		})
+	})
+
+	group.GET("/QueryByIds", func(c *gin.Context) {
+		ids := strings.Split(c.Query("ids"), ",")
+		idsInt := make([]int, len(ids))
+		for i, id := range ids {
+			idsInt[i], _ = strconv.Atoi(id)
+		}
+		users, _ := service.GetUsers(idsInt)
+		common.ApiResponseOk(c, common.Response[[]model.User]{
+			Data: &users,
 		})
 	})
 

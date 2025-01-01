@@ -6,6 +6,8 @@ import (
 	"HereWeGo/db/model"
 	"fmt"
 	"log"
+	"slices"
+	"time"
 )
 
 const (
@@ -25,6 +27,46 @@ func GetUser(id int) (*model.User, error) {
 		return user
 	})
 	return &data, nil
+}
+
+func GetUsers(ids []int) ([]model.User, error) {
+	if len(ids) == 0 {
+		return make([]model.User, 0), nil
+	}
+
+	var result = make([]model.User, 0)
+	var missingIds = make([]int, 0)
+	var keys = make([]string, 0)
+	for _, id := range ids {
+		var key = fmt.Sprintf(userCacheKey, id)
+		keys = append(keys, key)
+	}
+	var foundUsers = db.GetCaches[model.User](keys)
+	var foundUserIds = make([]int, 0)
+	for _, u := range foundUsers {
+		foundUserIds = append(foundUserIds, u.Id)
+		result = append(result, u)
+	}
+	for _, id := range ids {
+		if !slices.Contains(foundUserIds, id) {
+			missingIds = append(missingIds, id)
+		}
+	}
+
+	if len(missingIds) > 0 {
+		var users []model.User
+		rows, err := db.DB.Where("id in (?)", missingIds).Find(&users).Rows()
+		if err != nil {
+			return nil, err
+		}
+		defer db.CloseRows(rows)
+		for _, user := range users {
+			var key = fmt.Sprintf(userCacheKey, user.Id)
+			db.SetCache(key, user, 5*time.Minute)
+			result = append(result, user)
+		}
+	}
+	return result, nil
 }
 
 func UserByPage(page common.Page) (*common.PageResult[model.User], error) {

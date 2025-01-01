@@ -1,10 +1,10 @@
-package components
+package conf
 
 import (
 	"github.com/BurntSushi/toml"
 	"github.com/apolloconfig/agollo/v4/env/config"
 	"github.com/go-redis/redis/v8"
-	"github.com/sirupsen/logrus"
+	"log"
 )
 
 type Conf struct {
@@ -38,13 +38,10 @@ type RocketMQConf struct {
 	NameServer []string `json:"nameServer"`
 }
 
-var conf *Conf
+var Config Conf
 
-func GetConfig() *Conf {
-	if conf == nil {
-		if _, err := toml.DecodeFile("_conf/config.toml", &conf); err != nil {
-			logrus.Fatal(err)
-		}
+func init() {
+	if _, err := toml.DecodeFile("_conf/config.toml", &Config); err != nil {
+		log.Fatal(err)
 	}
-	return conf
 }

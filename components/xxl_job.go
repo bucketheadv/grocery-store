@@ -1,6 +1,7 @@
 package components
 
 import (
+	"HereWeGo/conf"
 	"bufio"
 	"errors"
 	"fmt"
@@ -26,19 +27,19 @@ func (l *logger) Error(format string, a ...interface{}) {
 var exec xxl.Executor
 
 func init() {
-	conf := GetConfig().XxlJob
+	config := conf.Config.XxlJob
 	// 开始日志清理
 	go startClearLogFile()
 
-	if !conf.Enabled {
+	if !config.Enabled {
 		return
 	}
 
 	exec = xxl.NewExecutor(
-		xxl.ServerAddr(conf.ServerAddr),
-		xxl.AccessToken(conf.AccessToken),
-		xxl.ExecutorPort(conf.ExecutorPort),
-		xxl.RegistryKey(conf.RegistryKey),
+		xxl.ServerAddr(config.ServerAddr),
+		xxl.AccessToken(config.AccessToken),
+		xxl.ExecutorPort(config.ExecutorPort),
+		xxl.RegistryKey(config.RegistryKey),
 		xxl.SetLogger(&logger{}),
 	)
 
@@ -46,7 +47,7 @@ func init() {
 
 	exec.LogHandler(func(req *xxl.LogReq) *xxl.LogRes {
 		var dateTime = time.UnixMilli(req.LogDateTim)
-		filePath := fmt.Sprintf("%s%c%s", conf.LogDir, os.PathSeparator, dateTime.Format(time.DateOnly))
+		filePath := fmt.Sprintf("%s%c%s", config.LogDir, os.PathSeparator, dateTime.Format(time.DateOnly))
 		if _, err := os.Stat(filePath); err != nil {
 			logrus.Errorf("读取目录异常, %s", err.Error())
 			if err := os.MkdirAll(filePath, os.ModePerm); err != nil {
@@ -77,8 +78,8 @@ func init() {
 }
 
 func LogJobInfo(param *xxl.RunReq, format string, a ...interface{}) {
-	conf := GetConfig().XxlJob
-	dir := fmt.Sprintf("%s%c%s", conf.LogDir, os.PathSeparator, time.Now().Format(time.DateOnly))
+	config := conf.Config.XxlJob
+	dir := fmt.Sprintf("%s%c%s", config.LogDir, os.PathSeparator, time.Now().Format(time.DateOnly))
 	if _, err := os.Stat(dir); err != nil {
 		if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 			logrus.Errorf("创建文件失败, %s", err.Error())
@@ -149,18 +150,18 @@ func startClearLogFile() {
 		select {
 		case <-tick:
 			logrus.Info("开始清理Xxl-Job日志")
-			conf := GetConfig().XxlJob
-			logRetention := conf.LogRetention
+			config := conf.Config.XxlJob
+			logRetention := config.LogRetention
 			whiteListLogs := make([]string, 0)
 			for i := 0; i <= logRetention; i++ {
 				date := time.Now().Add(-time.Duration(i) * 24 * time.Hour).Format(time.DateOnly)
 				whiteListLogs = append(whiteListLogs, date)
 			}
-			err := filepath.Walk(conf.LogDir, func(path string, info os.FileInfo, err error) error {
-				if path == conf.LogDir || info == nil {
+			err := filepath.Walk(config.LogDir, func(path string, info os.FileInfo, err error) error {
+				if path == config.LogDir || info == nil {
 					return nil
 				}
-				fullPath := strings.Replace(path, conf.LogDir, conf.LogDir, -1)
+				fullPath := strings.Replace(path, config.LogDir, config.LogDir, -1)
 				if info.IsDir() && !slices.Contains(whiteListLogs, info.Name()) {
 					if err := os.RemoveAll(fullPath); err != nil {
 						logrus.Error(err.Error())

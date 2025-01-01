@@ -1,6 +1,7 @@
 package components
 
 import (
+	"HereWeGo/conf"
 	"context"
 	"errors"
 	"github.com/apache/rocketmq-client-go/v2"
@@ -14,11 +15,11 @@ import (
 var RocketMqProducer rocketmq.Producer
 var RocketMqConsumer rocketmq.PushConsumer
 
-var DemoTopic = "demo_topic"
+const DemoTopic = "demo_topic"
 
 func init() {
-	conf := GetConfig().RocketMQ
-	if !conf.Enabled {
+	config := conf.Config.RocketMQ
+	if !config.Enabled {
 		return
 	}
 	initProducer()
@@ -26,8 +27,8 @@ func init() {
 }
 
 func initProducer() {
-	conf := GetConfig().RocketMQ
-	endpoint := conf.NameServer
+	config := conf.Config.RocketMQ
+	endpoint := config.NameServer
 	prod, err := rocketmq.NewProducer(
 		producer.WithNameServer(endpoint),
 		producer.WithRetry(2),
@@ -44,8 +45,8 @@ func initProducer() {
 }
 
 func initConsumer() {
-	conf := GetConfig().RocketMQ
-	endpoint := conf.NameServer
+	config := conf.Config.RocketMQ
+	endpoint := config.NameServer
 	consume, err := rocketmq.NewPushConsumer(
 		consumer.WithNameServer(endpoint),
 		consumer.WithRetry(2),
@@ -63,16 +64,16 @@ func initConsumer() {
 }
 
 func SyncSendMsg(msg *primitive.Message) (*primitive.SendResult, error) {
-	conf := GetConfig().RocketMQ
-	if !conf.Enabled {
+	config := conf.Config.RocketMQ
+	if !config.Enabled {
 		return nil, errors.New("RocketMQ not enabled")
 	}
 	return RocketMqProducer.SendSync(context.Background(), msg)
 }
 
 func createTopic(topic string) {
-	conf := GetConfig().RocketMQ
-	h, err := admin.NewAdmin(admin.WithResolver(primitive.NewPassthroughResolver(conf.NameServer)))
+	config := conf.Config.RocketMQ
+	h, err := admin.NewAdmin(admin.WithResolver(primitive.NewPassthroughResolver(config.NameServer)))
 	if err != nil {
 		logrus.Fatal(err)
 	}
@@ -83,8 +84,8 @@ func createTopic(topic string) {
 }
 
 func RegConsumer(topic string, f func(context.Context, ...*primitive.MessageExt) (consumer.ConsumeResult, error)) {
-	conf := GetConfig().RocketMQ
-	if !conf.Enabled {
+	config := conf.Config.RocketMQ
+	if !config.Enabled {
 		return
 	}
 	c := RocketMqConsumer

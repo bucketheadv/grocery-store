@@ -48,10 +48,12 @@ func GetTimeZone(name string) *time.Location {
 	return timeZoneMap[name]
 }
 
+// WithZone 时区转换，并计算对应大区的时间
 func WithZone(now time.Time, location *time.Location) time.Time {
 	return now.In(location)
 }
 
+// WithZoneRetainFields 仅时区转换，时间不变
 func WithZoneRetainFields(now time.Time, location *time.Location) time.Time {
 	return time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second(), now.Nanosecond(), location)
 }

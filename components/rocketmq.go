@@ -12,8 +12,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var RocketMqProducer rocketmq.Producer
-var RocketMqConsumer rocketmq.PushConsumer
+var RocketMQProducer rocketmq.Producer
+var RocketMQConsumer rocketmq.PushConsumer
 
 const DemoTopic = "demo_topic"
 
@@ -41,7 +41,7 @@ func initProducer() {
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	RocketMqProducer = prod
+	RocketMQProducer = prod
 }
 
 func initConsumer() {
@@ -60,7 +60,7 @@ func initConsumer() {
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	RocketMqConsumer = consume
+	RocketMQConsumer = consume
 }
 
 func SyncSendMsg(msg *primitive.Message) (*primitive.SendResult, error) {
@@ -68,7 +68,7 @@ func SyncSendMsg(msg *primitive.Message) (*primitive.SendResult, error) {
 	if !config.Enabled {
 		return nil, errors.New("RocketMQ not enabled")
 	}
-	return RocketMqProducer.SendSync(context.Background(), msg)
+	return RocketMQProducer.SendSync(context.Background(), msg)
 }
 
 func createTopic(topic string) {
@@ -88,7 +88,7 @@ func RegConsumer(topic string, f func(context.Context, ...*primitive.MessageExt)
 	if !config.Enabled {
 		return
 	}
-	c := RocketMqConsumer
+	c := RocketMQConsumer
 	err := c.Subscribe(topic, consumer.MessageSelector{}, f)
 	if err != nil {
 		logrus.Fatal(err)

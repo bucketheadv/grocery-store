@@ -65,8 +65,7 @@ func init() {
 	})
 
 	group.GET("/Apollo", func(c *gin.Context) {
-		config := conf.ApolloClient.GetConfig("application")
-		var timeout = config.GetIntValue("timeout", 0)
+		var timeout = conf.ApolloNamespaceValue[int]("application", "timeout")
 		core.ApiResponseOk(c, core.Response[int]{
 			Data: timeout,
 		})

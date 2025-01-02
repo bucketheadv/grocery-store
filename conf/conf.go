@@ -57,16 +57,16 @@ func init() {
 	if _, err := toml.DecodeFile("_conf/config.toml", &Config); err != nil {
 		log.Fatal(err)
 	}
-	if Config.Apollo.Enabled {
-		InitApolloClient()
-		var jdbcUrl = GetApolloConfig("mysql.url")
+
+	initApolloClient(Config.Apollo, func() {
+		var jdbcUrl = ApolloApplicationConfig("mysql.url")
 		if jdbcUrl != "" {
 			Config.MySql.Url = jdbcUrl
 		}
 
-		var redisAddr = GetApolloConfig("redis.addr")
+		var redisAddr = ApolloApplicationConfig("redis.addr")
 		if redisAddr != "" {
 			Config.Redis.Addr = redisAddr
 		}
-	}
+	})
 }

@@ -44,7 +44,7 @@ func GetUsers(ids []int) ([]model.User, error) {
 	var foundUsers = db.GetCaches[model.User](keys)
 	var foundUserIds = make([]int, 0)
 	for _, u := range foundUsers {
-		foundUserIds = append(foundUserIds, u.Id)
+		foundUserIds = append(foundUserIds, u.ID)
 		result = append(result, u)
 	}
 	for _, id := range ids {
@@ -61,7 +61,7 @@ func GetUsers(ids []int) ([]model.User, error) {
 		}
 		defer db.CloseRows(rows)
 		for _, user := range users {
-			var key = fmt.Sprintf(userCacheKey, user.Id)
+			var key = fmt.Sprintf(userCacheKey, user.ID)
 			db.SetCache(key, user, 5*time.Minute)
 			result = append(result, user)
 		}

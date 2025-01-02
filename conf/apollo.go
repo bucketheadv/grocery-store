@@ -1,32 +1,33 @@
 package conf
 
 import (
+	"HereWeGo/core"
+	"cmp"
 	"github.com/apolloconfig/agollo/v4"
 	"github.com/apolloconfig/agollo/v4/env/config"
 	"github.com/apolloconfig/agollo/v4/storage"
 	"github.com/sirupsen/logrus"
 )
 
-type ApolloChangeListener struct{}
+type apolloChangeListener struct{}
 
-func (c *ApolloChangeListener) OnChange(event *storage.ChangeEvent) {
+func (c *apolloChangeListener) OnChange(event *storage.ChangeEvent) {
 	for k, v := range event.Changes {
 		logrus.Infof("apollo %v config changed, key: %v, old value: %v, new value: %v",
 			event.Namespace, k, v.OldValue, v.NewValue)
 	}
 }
 
-func (c *ApolloChangeListener) OnNewestChange(event *storage.FullChangeEvent) {
-	for k, v := range event.Changes {
-		logrus.Infof("apollo config pull, key: %s, value: %v", k, v)
-	}
+func (c *apolloChangeListener) OnNewestChange(event *storage.FullChangeEvent) {
+	logrus.Infof("Apollo config pull, namespace [%s] updated to latest version", event.Namespace)
 }
 
-var ApolloClient agollo.Client
+var apolloClient agollo.Client
 
-func InitApolloClient() {
-	c := Config.Apollo
-
+func initApolloClient(c ApolloConf, onSuccess func()) {
+	if !c.Enabled {
+		return
+	}
 	client, err := agollo.StartWithConfig(func() (*config.AppConfig, error) {
 		var appConfig = &config.AppConfig{
 			AppID:          c.AppID,
@@ -43,10 +44,24 @@ func InitApolloClient() {
 		return
 	}
 
-	client.AddChangeListener(&ApolloChangeListener{})
-	ApolloClient = client
+	client.AddChangeListener(&apolloChangeListener{})
+	apolloClient = client
+	if onSuccess != nil {
+		onSuccess()
+	}
 }
 
-func GetApolloConfig(key string) string {
-	return ApolloClient.GetValue(key)
+func ApolloApplicationConfig(key string) string {
+	return apolloClient.GetValue(key)
+}
+
+func ApolloNamespace(namespace string) *storage.Config {
+	return apolloClient.GetConfig(namespace)
+}
+
+func ApolloNamespaceValue[T cmp.Ordered | bool](namespace, key string) T {
+	v := ApolloNamespace(namespace).GetValue(key)
+	var t T
+	core.ConvertStringTo(v, &t)
+	return t
 }

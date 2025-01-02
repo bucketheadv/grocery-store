@@ -5,7 +5,7 @@ go 1.23.4
 require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/apache/rocketmq-client-go/v2 v2.1.2
-	github.com/bucketheadv/infragin v0.0.8
+	github.com/bucketheadv/infragin v0.1.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/shopspring/decimal v1.4.0

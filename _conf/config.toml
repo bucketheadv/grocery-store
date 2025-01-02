@@ -25,7 +25,7 @@ logRetention=7
 
 [rocketMQ]
 enabled=false
-nameServer=["192.168.110.107:9876"]
+nameServer=["127.0.0.1:9876"]
 groupName="HereWeGo"
 messageModel=1
 retry=2

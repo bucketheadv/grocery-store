@@ -2,30 +2,20 @@ package conf
 
 import (
 	"github.com/BurntSushi/toml"
+	"github.com/bucketheadv/infragin"
 	"github.com/bucketheadv/infragin/components"
+	"github.com/bucketheadv/infragin/db"
 	"github.com/go-redis/redis/v8"
 	"github.com/sirupsen/logrus"
 )
 
 type Conf struct {
-	Server   ServerConf              `json:"server"`
+	Server   infragin.ServerConf     `json:"server"`
 	Apollo   components.ApolloConf   `json:"apollo"`
 	XxlJob   components.XxlJobConf   `json:"xxlJob"`
-	MySql    MySqlConf               `json:"mysql"`
+	MySql    db.MySqlConf            `json:"mysql"`
 	Redis    redis.Options           `json:"redis"`
 	RocketMQ components.RocketMQConf `json:"rocketMQ"`
-}
-
-type ServerConf struct {
-	Port int `json:"port"`
-}
-
-type MySqlConf struct {
-	Url string `json:"url"`
-}
-
-type RedisConf struct {
-	Url string `json:"url"`
 }
 
 var Config Conf
@@ -36,14 +26,7 @@ func init() {
 	}
 
 	components.InitApolloClient(Config.Apollo, func() {
-		var jdbcUrl = components.ApolloApplicationConfig("mysql.url")
-		if jdbcUrl != "" {
-			Config.MySql.Url = jdbcUrl
-		}
-
-		var redisAddr = components.ApolloApplicationConfig("redis.addr")
-		if redisAddr != "" {
-			Config.Redis.Addr = redisAddr
-		}
+		components.AssignConfigValueTo("application", "mysql.url", &Config.MySql.Url)
+		components.AssignConfigValueTo("application", "redis.url", &Config.Redis.Addr)
 	})
 }

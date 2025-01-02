@@ -2,13 +2,13 @@ package initializer
 
 import (
 	"HereWeGo/conf"
-	"github.com/bucketheadv/infragin/components"
+	"github.com/bucketheadv/infragin/components/xxljob"
 )
 
-var XxlJobClient components.XxlJobClient
+var XxlJobClient xxljob.Client
 
 func init() {
 	config := conf.Config.XxlJob
-	client := components.NewJobClient(config)
+	client := xxljob.NewClient(config)
 	XxlJobClient = client
 }

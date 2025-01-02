@@ -2,16 +2,16 @@ package initializer
 
 import (
 	"HereWeGo/conf"
-	"github.com/bucketheadv/infragin/components"
+	"github.com/bucketheadv/infragin/components/rocket"
 )
 
 const DemoTopic = "demo_topic"
 
-var RocketMQProducer components.InfraRocketMQProducer
-var RocketMQConsumer components.InfraRocketMQConsumer
+var RocketMQProducer rocket.InfraRocketMQProducer
+var RocketMQConsumer rocket.InfraRocketMQConsumer
 
 func init() {
 	config := conf.Config.RocketMQ
-	RocketMQProducer = components.InitProducer(config)
-	RocketMQConsumer = components.InitConsumer(config)
+	RocketMQProducer = rocket.InitProducer(config)
+	RocketMQConsumer = rocket.InitConsumer(config)
 }

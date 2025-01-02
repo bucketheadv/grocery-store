@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
 	"github.com/bucketheadv/infragin"
-	"github.com/bucketheadv/infragin/components"
+	"github.com/bucketheadv/infragin/components/apollo"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"math/rand"
@@ -17,7 +17,7 @@ import (
 )
 
 func init() {
-	r := components.Engine
+	r := infragin.Engine
 	group := r.Group("/User")
 	group.GET("/GetById", func(c *gin.Context) {
 		id, success := c.GetQuery("id")
@@ -65,7 +65,7 @@ func init() {
 	})
 
 	group.GET("/Apollo", func(c *gin.Context) {
-		var timeout = components.ApolloNamespaceValue[int]("application", "timeout")
+		var timeout = apollo.NamespaceValue[int]("application", "timeout")
 		infragin.ApiResponseOk(c, infragin.Response[int]{
 			Data: timeout,
 		})

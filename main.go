@@ -2,12 +2,11 @@ package main
 
 import (
 	_ "HereWeGo/api"
-	"HereWeGo/components"
 	"HereWeGo/conf"
 	_ "HereWeGo/consumer"
 	_ "HereWeGo/job"
-	_ "HereWeGo/middlewares"
 	"fmt"
+	"github.com/bucketheadv/infragin/components"
 	"github.com/sirupsen/logrus"
 )
 

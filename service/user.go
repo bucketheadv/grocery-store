@@ -1,10 +1,11 @@
 package service
 
 import (
-	"HereWeGo/core"
-	"HereWeGo/db"
-	"HereWeGo/db/model"
+	"HereWeGo/database"
+	"HereWeGo/database/model"
 	"fmt"
+	"github.com/bucketheadv/infragin"
+	"github.com/bucketheadv/infragin/db"
 	"github.com/sirupsen/logrus"
 	"slices"
 	"time"
@@ -17,9 +18,9 @@ const (
 
 func GetUser(id int) (*model.User, error) {
 	var key = fmt.Sprintf(userCacheKey, id)
-	var data = db.FetchCache(key, 5*time.Minute, func() model.User {
+	var data = db.FetchCache(database.RedisClient, key, 5*time.Minute, func() model.User {
 		var user model.User
-		rows, err := db.DB.Where("id = ?", id).Find(&user).Rows()
+		rows, err := database.DB.Where("id = ?", id).Find(&user).Rows()
 		if err != nil {
 			panic(err)
 		}
@@ -41,7 +42,7 @@ func GetUsers(ids []int) ([]model.User, error) {
 		var key = fmt.Sprintf(userCacheKey, id)
 		keys = append(keys, key)
 	}
-	var foundUsers = db.GetCaches[model.User](keys)
+	var foundUsers = db.GetCaches[model.User](database.RedisClient, keys)
 	var foundUserIds = make([]int, 0)
 	for _, u := range foundUsers {
 		foundUserIds = append(foundUserIds, u.ID)
@@ -55,25 +56,25 @@ func GetUsers(ids []int) ([]model.User, error) {
 
 	if len(missingIds) > 0 {
 		var users []model.User
-		rows, err := db.DB.Where("id in (?)", missingIds).Find(&users).Rows()
+		rows, err := database.DB.Where("id in (?)", missingIds).Find(&users).Rows()
 		if err != nil {
 			return nil, err
 		}
 		defer db.CloseRows(rows)
 		for _, user := range users {
 			var key = fmt.Sprintf(userCacheKey, user.ID)
-			db.SetCache(key, user, 5*time.Minute)
+			db.SetCache(database.RedisClient, key, user, 5*time.Minute)
 			result = append(result, user)
 		}
 	}
 	return result, nil
 }
 
-func UserByPage(page core.Page) (core.PageResult[model.User], error) {
+func UserByPage(page infragin.Page) (infragin.PageResult[model.User], error) {
 	var key = fmt.Sprintf(userPageCacheKey, page.PageNo, page.PageSize)
-	var data = db.FetchCache(key, 5*time.Minute, func() *[]model.User {
+	var data = db.FetchCache(database.RedisClient, key, 5*time.Minute, func() *[]model.User {
 		var users *[]model.User
-		rows, err := db.Page(db.DB, page).Find(&users).Rows()
+		rows, err := db.Page(database.DB, page).Find(&users).Rows()
 		if err != nil {
 			logrus.Error("查询数据失败, ", err.Error())
 			return nil
@@ -81,7 +82,7 @@ func UserByPage(page core.Page) (core.PageResult[model.User], error) {
 		defer db.CloseRows(rows)
 		return users
 	})
-	pageInfo := core.PageResult[model.User]{
+	pageInfo := infragin.PageResult[model.User]{
 		Page:    page,
 		Records: *data,
 	}

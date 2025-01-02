@@ -1,9 +1,7 @@
-package db
+package database
 
 import (
 	"HereWeGo/conf"
-	"HereWeGo/core"
-	"database/sql"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -20,16 +18,5 @@ func init() {
 	})
 	if err != nil {
 		logrus.Fatalln(err)
-	}
-}
-
-func Page(db *gorm.DB, page core.Page) *gorm.DB {
-	return db.Offset(page.Offset()).Limit(page.Limit())
-}
-
-func CloseRows(rows *sql.Rows) {
-	err := rows.Close()
-	if err != nil {
-		logrus.Println(err)
 	}
 }

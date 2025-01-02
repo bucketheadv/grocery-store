@@ -1,14 +1,14 @@
 package api
 
 import (
-	"HereWeGo/components"
-	"HereWeGo/conf"
-	"HereWeGo/core"
-	"HereWeGo/db/model"
+	"HereWeGo/database/model"
+	"HereWeGo/initializer"
 	"HereWeGo/service"
 	"errors"
 	"fmt"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
+	"github.com/bucketheadv/infragin"
+	"github.com/bucketheadv/infragin/components"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"math/rand"
@@ -35,19 +35,19 @@ func init() {
 			_ = c.Error(errors.New("查询数据失败, " + err.Error()))
 			return
 		}
-		core.ApiResponseOk(c, core.Response[*model.User]{
+		infragin.ApiResponseOk(c, infragin.Response[*model.User]{
 			Data: user,
 		})
 	})
 
 	group.GET("/Query", func(c *gin.Context) {
-		page := core.ParsePageParams(c)
+		page := infragin.ParsePageParams(c)
 		pageInfo, err := service.UserByPage(page)
 		if err != nil {
 			_ = c.Error(errors.New("查询用户失败, " + err.Error()))
 			return
 		}
-		core.ApiResponseOk(c, core.Response[core.PageResult[model.User]]{
+		infragin.ApiResponseOk(c, infragin.Response[infragin.PageResult[model.User]]{
 			Data: pageInfo,
 		})
 	})
@@ -59,28 +59,28 @@ func init() {
 			idsInt[i], _ = strconv.Atoi(id)
 		}
 		users, _ := service.GetUsers(idsInt)
-		core.ApiResponseOk(c, core.Response[[]model.User]{
+		infragin.ApiResponseOk(c, infragin.Response[[]model.User]{
 			Data: users,
 		})
 	})
 
 	group.GET("/Apollo", func(c *gin.Context) {
-		var timeout = conf.ApolloNamespaceValue[int]("application", "timeout")
-		core.ApiResponseOk(c, core.Response[int]{
+		var timeout = components.ApolloNamespaceValue[int]("application", "timeout")
+		infragin.ApiResponseOk(c, infragin.Response[int]{
 			Data: timeout,
 		})
 	})
 
 	group.GET("/SendMqMsg", func(c *gin.Context) {
 		var msg = fmt.Sprintf("测试数据 %d", rand.Int())
-		_, err := components.SyncSendMsg(&primitive.Message{
-			Topic: components.DemoTopic,
+		_, err := initializer.RocketMQProducer.SendSync(&primitive.Message{
+			Topic: initializer.DemoTopic,
 			Body:  []byte(msg),
 		})
 		if err != nil {
 			logrus.Error(err)
 		}
-		core.ApiResponseOk(c, core.Response[*model.User]{
+		infragin.ApiResponseOk(c, infragin.Response[*model.User]{
 			Data: nil,
 		})
 	})

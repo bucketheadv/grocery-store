@@ -5,7 +5,7 @@ go 1.23.4
 require (
 	github.com/BurntSushi/toml v1.4.0
 	github.com/apache/rocketmq-client-go/v2 v2.1.2
-	github.com/bucketheadv/infragin v0.1.5
+	github.com/bucketheadv/infragin v0.1.6
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/shopspring/decimal v1.4.0
@@ -18,7 +18,7 @@ require gorm.io/driver/mysql v1.5.7 // indirect
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/apolloconfig/agollo/v4 v4.4.0 // indirect
-	github.com/bucketheadv/infracore v0.0.2 // indirect
+	github.com/bucketheadv/infracore v0.0.3 // indirect
 	github.com/bytedance/sonic v1.12.6 // indirect
 	github.com/bytedance/sonic/loader v0.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect

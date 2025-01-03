@@ -56,10 +56,10 @@ github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da/go.mod h1:Q73ZrmV
 github.com/armon/go-radix v0.0.0-20180808171621-7fddfc383310/go.mod h1:ufUuZ+zHj4x4TnLV4JWEpy2hxWSpsRywHrMgIH9cCH8=
 github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kBD4zp0CCIs=
 github.com/bketelsen/crypt v0.0.4/go.mod h1:aI6NrJ0pMGgvZKL1iVgXLnfIFJtfV+bKCoqOes/6LfM=
-github.com/bucketheadv/infracore v0.0.2 h1:fX2e3T5kUWgkFbMHps+v5RX3Kj4c5JlQBkHIb+bOorc=
-github.com/bucketheadv/infracore v0.0.2/go.mod h1:K4PRli4kczRgdOvzohKPT6c+5doYCx80UX2ygP0Tvd0=
-github.com/bucketheadv/infragin v0.1.5 h1:6bVgaoYfz2Rt7k7oSriQPt1ubHgNsUMM14DEjpu7MOI=
-github.com/bucketheadv/infragin v0.1.5/go.mod h1:2zWcM0QoNes/A+ba1z+a2ZO4ELnPrghcnpcz9KEEycg=
+github.com/bucketheadv/infracore v0.0.3 h1:5s8srJNfrhi9MeYgYoUJ31nm85byWHAAVJ+IPU7IGrQ=
+github.com/bucketheadv/infracore v0.0.3/go.mod h1:IZikdc7LGn7S5ObAXvlBQ3C9gmYP58BlBdzdgwwKq0o=
+github.com/bucketheadv/infragin v0.1.6 h1:BPpH/cuumkyH02u81ySknoAF+A9ar779HGoGRLycFl8=
+github.com/bucketheadv/infragin v0.1.6/go.mod h1:m25Rny7I29lrW2DRC3RBtUxJv7gZa3ErbyeGv2sArQI=
 github.com/bytedance/sonic v1.12.6 h1:/isNmCUF2x3Sh8RAp/4mh4ZGkcFAX/hLrzrK3AvpRzk=
 github.com/bytedance/sonic v1.12.6/go.mod h1:B8Gt/XvtZ3Fqj+iSKMypzymZxw/FVwgIGKzMzT9r/rk=
 github.com/bytedance/sonic/loader v0.1.1/go.mod h1:ncP89zfokxS5LZrJxl5z0UJcsk4M4yY2JpfqGeCtNLU=

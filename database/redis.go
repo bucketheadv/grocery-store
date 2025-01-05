@@ -8,6 +8,6 @@ import (
 var RedisClient *redis.Client
 
 func init() {
-	config := conf.Config.Redis
-	RedisClient = redis.NewClient(&config)
+	config := conf.Config.Redis["main"]
+	RedisClient = redis.NewClient(config)
 }

@@ -3,9 +3,8 @@ module HereWeGo
 go 1.23.4
 
 require (
-	github.com/BurntSushi/toml v1.4.0
 	github.com/apache/rocketmq-client-go/v2 v2.1.2
-	github.com/bucketheadv/infragin v0.1.6
+	github.com/bucketheadv/infragin v0.1.10
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/shopspring/decimal v1.4.0
@@ -13,7 +12,10 @@ require (
 	gorm.io/gorm v1.25.12
 )
 
-require gorm.io/driver/mysql v1.5.7 // indirect
+require (
+	github.com/BurntSushi/toml v1.1.0 // indirect
+	gorm.io/driver/mysql v1.5.7 // indirect
+)
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect

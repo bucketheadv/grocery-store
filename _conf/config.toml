@@ -1,31 +1,31 @@
-[server]
-port=5050
+[Server]
+Port=5050
 
-[mysql]
-url="root:123456@tcp(localhost:3306)/brian"
+[MySQL.main]
+Url="root:123456@tcp(localhost:3306)/brian"
 
-[redis]
-addr="localhost:6379"
+[Redis.main]
+Addr="localhost:6379"
 
-[apollo]
-enabled=true
-appId="SampleApp"
-cluster="DEV"
-ip="http://localhost:8080"
-namespaceName="application"
+[Apollo]
+Enabled=true
+AppId="SampleApp"
+Cluster="DEV"
+IP="http://localhost:8080"
+NamespaceName="application"
 
-[xxlJob]
-enabled=false
-serverAddr="http://localhost:9090"
-accessToken="default_token"
-executorPort="9999"
-registryKey="xxl-job-executor-sample"
-logDir="/Users/sven/Downloads/xxl-job-log"
-logRetention=7
+[XxlJob]
+Enabled=false
+ServerAddr="http://localhost:9090"
+AccessToken="default_token"
+ExecutorPort="9999"
+RegistryKey="xxl-job-executor-sample"
+LogDir="/Users/sven/Downloads/xxl-job-log"
+LogRetention=7
 
-[rocketMQ]
-enabled=false
-nameServer=["127.0.0.1:9876"]
-groupName="HereWeGo"
-messageModel=1
-retry=2
+[RocketMQ.main]
+Enabled=false
+NameServer=["127.0.0.1:9876"]
+GroupName="HereWeGo"
+MessageModel=1
+Retry=2

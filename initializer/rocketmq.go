@@ -11,7 +11,7 @@ var RocketMQProducer rocket.InfraRocketMQProducer
 var RocketMQConsumer rocket.InfraRocketMQConsumer
 
 func init() {
-	config := conf.Config.RocketMQ
-	RocketMQProducer = rocket.InitProducer(config)
-	RocketMQConsumer = rocket.InitConsumer(config)
+	config := conf.Config.RocketMQ["main"]
+	RocketMQProducer = rocket.InitProducer(*config)
+	RocketMQConsumer = rocket.InitConsumer(*config)
 }

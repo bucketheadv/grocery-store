@@ -57,8 +57,8 @@ github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kB
 github.com/bketelsen/crypt v0.0.4/go.mod h1:aI6NrJ0pMGgvZKL1iVgXLnfIFJtfV+bKCoqOes/6LfM=
 github.com/bucketheadv/infracore v0.0.3 h1:5s8srJNfrhi9MeYgYoUJ31nm85byWHAAVJ+IPU7IGrQ=
 github.com/bucketheadv/infracore v0.0.3/go.mod h1:IZikdc7LGn7S5ObAXvlBQ3C9gmYP58BlBdzdgwwKq0o=
-github.com/bucketheadv/infragin v0.1.10 h1:/udWaAfXa+lE9cRPPaSjuB8D3U/vh8NRDcMJYA5opf8=
-github.com/bucketheadv/infragin v0.1.10/go.mod h1:qLGRV9FWHJKaqboMa021B5hedStpSZ75kCynshnNzZ8=
+github.com/bucketheadv/infragin v0.1.11 h1:/HLH7L0zBdog5yINvKRM1coljbeicqMoRaQqowGshM0=
+github.com/bucketheadv/infragin v0.1.11/go.mod h1:qLGRV9FWHJKaqboMa021B5hedStpSZ75kCynshnNzZ8=
 github.com/bytedance/sonic v1.12.6 h1:/isNmCUF2x3Sh8RAp/4mh4ZGkcFAX/hLrzrK3AvpRzk=
 github.com/bytedance/sonic v1.12.6/go.mod h1:B8Gt/XvtZ3Fqj+iSKMypzymZxw/FVwgIGKzMzT9r/rk=
 github.com/bytedance/sonic/loader v0.1.1/go.mod h1:ncP89zfokxS5LZrJxl5z0UJcsk4M4yY2JpfqGeCtNLU=

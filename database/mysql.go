@@ -10,7 +10,7 @@ import (
 var DB *gorm.DB
 
 func init() {
-	config := conf.Config.MySql["main"]
+	config := conf.Config.MySQL["main"]
 	DB = db.NewMySQL(*config, &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})

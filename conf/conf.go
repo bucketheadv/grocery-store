@@ -14,7 +14,7 @@ func init() {
 	}
 
 	apollo.InitClient(Config.Apollo, func() {
-		var mysql = Config.MySql["main"]
+		var mysql = Config.MySQL["main"]
 		apollo.AssignConfigValueTo("application", "mysql.main.url", &mysql.Url)
 		var redis = Config.Redis["main"]
 		apollo.AssignConfigValueTo("application", "redis.main.url", &redis.Addr)

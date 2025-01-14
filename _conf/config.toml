@@ -26,6 +26,6 @@ LogRetention=7
 [RocketMQ.main]
 Enabled=false
 NameServer=["127.0.0.1:9876"]
-GroupName="HereWeGo"
+GroupName="grocery-store"
 MessageModel=1
 Retry=2

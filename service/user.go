@@ -1,12 +1,12 @@
 package service
 
 import (
-	"HereWeGo/database"
-	"HereWeGo/database/model"
 	"fmt"
-	"github.com/bucketheadv/infragin"
-	"github.com/bucketheadv/infragin/db"
+	"github.com/bucketheadv/infra-gin"
+	"github.com/bucketheadv/infra-gin/db"
 	"github.com/sirupsen/logrus"
+	"grocery-store/database"
+	"grocery-store/database/model"
 	"slices"
 	"time"
 )
@@ -70,7 +70,7 @@ func GetUsers(ids []int) ([]model.User, error) {
 	return result, nil
 }
 
-func UserByPage(page infragin.Page) (infragin.PageResult[model.User], error) {
+func UserByPage(page infra_gin.Page) (infra_gin.PageResult[model.User], error) {
 	var key = fmt.Sprintf(userPageCacheKey, page.PageNo, page.PageSize)
 	var data = db.FetchCache(database.RedisClient, key, 5*time.Minute, func() *[]model.User {
 		var users *[]model.User
@@ -82,7 +82,7 @@ func UserByPage(page infragin.Page) (infragin.PageResult[model.User], error) {
 		defer db.CloseRows(rows)
 		return users
 	})
-	pageInfo := infragin.PageResult[model.User]{
+	pageInfo := infra_gin.PageResult[model.User]{
 		Page:    page,
 		Records: *data,
 	}

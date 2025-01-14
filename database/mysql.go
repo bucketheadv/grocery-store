@@ -1,10 +1,10 @@
 package database
 
 import (
-	"HereWeGo/conf"
-	"github.com/bucketheadv/infragin/db"
+	"github.com/bucketheadv/infra-gin/db"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"grocery-store/conf"
 )
 
 var DB *gorm.DB

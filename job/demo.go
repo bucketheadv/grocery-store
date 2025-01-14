@@ -1,10 +1,10 @@
 package job
 
 import (
-	"HereWeGo/initializer"
 	"context"
 	"github.com/shopspring/decimal"
 	"github.com/xxl-job/xxl-job-executor-go"
+	"grocery-store/initializer"
 )
 
 func init() {

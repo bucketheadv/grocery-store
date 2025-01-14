@@ -1,23 +1,23 @@
 package api
 
 import (
-	"HereWeGo/database/model"
-	"HereWeGo/initializer"
-	"HereWeGo/service"
 	"errors"
 	"fmt"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
-	"github.com/bucketheadv/infragin"
-	"github.com/bucketheadv/infragin/components/apollo"
+	"github.com/bucketheadv/infra-gin"
+	"github.com/bucketheadv/infra-gin/components/apollo"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"grocery-store/database/model"
+	"grocery-store/initializer"
+	"grocery-store/service"
 	"math/rand"
 	"strconv"
 	"strings"
 )
 
 func init() {
-	r := infragin.Engine
+	r := infra_gin.Engine
 	group := r.Group("/User")
 	group.GET("/GetById", func(c *gin.Context) {
 		id, success := c.GetQuery("id")
@@ -35,19 +35,19 @@ func init() {
 			_ = c.Error(errors.New("查询数据失败, " + err.Error()))
 			return
 		}
-		infragin.ApiResponseOk(c, infragin.Response[*model.User]{
+		infra_gin.ApiResponseOk(c, infra_gin.Response[*model.User]{
 			Data: user,
 		})
 	})
 
 	group.GET("/Query", func(c *gin.Context) {
-		page := infragin.ParsePageParams(c)
+		page := infra_gin.ParsePageParams(c)
 		pageInfo, err := service.UserByPage(page)
 		if err != nil {
 			_ = c.Error(errors.New("查询用户失败, " + err.Error()))
 			return
 		}
-		infragin.ApiResponseOk(c, infragin.Response[infragin.PageResult[model.User]]{
+		infra_gin.ApiResponseOk(c, infra_gin.Response[infra_gin.PageResult[model.User]]{
 			Data: pageInfo,
 		})
 	})
@@ -59,14 +59,14 @@ func init() {
 			idsInt[i], _ = strconv.Atoi(id)
 		}
 		users, _ := service.GetUsers(idsInt)
-		infragin.ApiResponseOk(c, infragin.Response[[]model.User]{
+		infra_gin.ApiResponseOk(c, infra_gin.Response[[]model.User]{
 			Data: users,
 		})
 	})
 
 	group.GET("/Apollo", func(c *gin.Context) {
 		var timeout = apollo.NamespaceValue[int]("application", "timeout")
-		infragin.ApiResponseOk(c, infragin.Response[int]{
+		infra_gin.ApiResponseOk(c, infra_gin.Response[int]{
 			Data: timeout,
 		})
 	})
@@ -80,7 +80,7 @@ func init() {
 		if err != nil {
 			logrus.Error(err)
 		}
-		infragin.ApiResponseOk(c, infragin.Response[*model.User]{
+		infra_gin.ApiResponseOk(c, infra_gin.Response[*model.User]{
 			Data: nil,
 		})
 	})

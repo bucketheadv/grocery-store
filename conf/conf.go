@@ -1,8 +1,8 @@
 package conf
 
 import (
-	"github.com/bucketheadv/infragin/components/apollo"
-	"github.com/bucketheadv/infragin/conf"
+	"github.com/bucketheadv/infra-gin/components/apollo"
+	"github.com/bucketheadv/infra-gin/conf"
 	"github.com/sirupsen/logrus"
 )
 

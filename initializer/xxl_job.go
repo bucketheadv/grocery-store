@@ -1,8 +1,8 @@
 package initializer
 
 import (
-	"HereWeGo/conf"
-	"github.com/bucketheadv/infragin/components/xxljob"
+	"github.com/bucketheadv/infra-gin/components/xxljob"
+	"grocery-store/conf"
 )
 
 var XxlJobClient xxljob.Client

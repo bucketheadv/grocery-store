@@ -1,8 +1,8 @@
 package initializer
 
 import (
-	"HereWeGo/conf"
-	"github.com/bucketheadv/infragin/components/rocket"
+	"github.com/bucketheadv/infra-gin/components/rocket"
+	"grocery-store/conf"
 )
 
 const DemoTopic = "demo_topic"

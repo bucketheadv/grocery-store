@@ -1,8 +1,8 @@
 package database
 
 import (
-	"HereWeGo/conf"
 	"github.com/go-redis/redis/v8"
+	"grocery-store/conf"
 )
 
 var RedisClient *redis.Client

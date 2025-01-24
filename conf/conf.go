@@ -13,10 +13,10 @@ func init() {
 		logrus.Fatal(err)
 	}
 
-	apollo.InitClient(Config.Apollo, func() {
+	apollo.Init(Config.Apollo, func() {
 		var mysql = Config.MySQL["main"]
-		apollo.AssignConfigValueTo("application", "mysql.main.url", &mysql.Url)
+		apollo.AssignApplicationValue("mysql.main.url", &mysql.Url)
 		var redis = Config.Redis["main"]
-		apollo.AssignConfigValueTo("application", "redis.main.url", &redis.Addr)
+		apollo.AssignApplicationValue("redis.main.url", &redis.Addr)
 	})
 }

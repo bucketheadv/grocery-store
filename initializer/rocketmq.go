@@ -2,6 +2,7 @@ package initializer
 
 import (
 	"github.com/bucketheadv/infra-gin/components/rocket"
+	"github.com/sirupsen/logrus"
 	"grocery-store/conf"
 )
 
@@ -11,7 +12,10 @@ var RocketMQProducer rocket.InfraRocketMQProducer
 var RocketMQConsumer rocket.InfraRocketMQConsumer
 
 func init() {
-	config := conf.Config.RocketMQ["main"]
-	RocketMQProducer = rocket.InitProducer(*config)
-	RocketMQConsumer = rocket.InitConsumer(*config)
+	config, ok := conf.Config.RocketMQ["main"]
+	if !ok {
+		logrus.Fatalln("未找到 RocketMQ: main 配置")
+	}
+	RocketMQProducer = rocket.InitProducer(config)
+	RocketMQConsumer = rocket.InitConsumer(config)
 }

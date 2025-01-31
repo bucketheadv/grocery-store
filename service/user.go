@@ -18,7 +18,7 @@ const (
 
 func GetUser(id int) (*model.User, error) {
 	var key = fmt.Sprintf(userCacheKey, id)
-	var data = db.FetchCache(database.RedisClient, key, 5*time.Minute, func() model.User {
+	data, err := db.FetchCache(database.RedisClient, key, 5*time.Minute, func() model.User {
 		var user model.User
 		rows, err := database.DB.Where("id = ?", id).Find(&user).Rows()
 		if err != nil {
@@ -27,6 +27,9 @@ func GetUser(id int) (*model.User, error) {
 		defer db.CloseRows(rows)
 		return user
 	})
+	if err != nil {
+		panic(err)
+	}
 	return &data, nil
 }
 
@@ -42,7 +45,10 @@ func GetUsers(ids []int) ([]model.User, error) {
 		var key = fmt.Sprintf(userCacheKey, id)
 		keys = append(keys, key)
 	}
-	var foundUsers = db.GetCaches[model.User](database.RedisClient, keys)
+	foundUsers, err := db.GetCaches[model.User](database.RedisClient, keys)
+	if err != nil {
+		panic(err)
+	}
 	var foundUserIds = make([]int, 0)
 	for _, u := range foundUsers {
 		foundUserIds = append(foundUserIds, u.ID)
@@ -63,7 +69,10 @@ func GetUsers(ids []int) ([]model.User, error) {
 		defer db.CloseRows(rows)
 		for _, user := range users {
 			var key = fmt.Sprintf(userCacheKey, user.ID)
-			db.SetCache(database.RedisClient, key, user, 5*time.Minute)
+			err := db.SetCache(database.RedisClient, key, user, 5*time.Minute)
+			if err != nil {
+				panic(err)
+			}
 			result = append(result, user)
 		}
 	}
@@ -72,7 +81,7 @@ func GetUsers(ids []int) ([]model.User, error) {
 
 func UserByPage(page infra_gin.Page) (infra_gin.PageResult[model.User], error) {
 	var key = fmt.Sprintf(userPageCacheKey, page.PageNo, page.PageSize)
-	var data = db.FetchCache(database.RedisClient, key, 5*time.Minute, func() *[]model.User {
+	data, err := db.FetchCache(database.RedisClient, key, 5*time.Minute, func() *[]model.User {
 		var users *[]model.User
 		rows, err := db.Page(database.DB, page).Find(&users).Rows()
 		if err != nil {
@@ -82,6 +91,9 @@ func UserByPage(page infra_gin.Page) (infra_gin.PageResult[model.User], error) {
 		defer db.CloseRows(rows)
 		return users
 	})
+	if err != nil {
+		panic(err)
+	}
 	pageInfo := infra_gin.PageResult[model.User]{
 		Page:    page,
 		Records: *data,

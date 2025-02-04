@@ -30,7 +30,7 @@ func init() {
 			_ = c.Error(errors.New("查询数据失败, " + err.Error()))
 			return
 		}
-		infra_gin.ApiResponseOk(c, infra_gin.Response[*po.User]{
+		infra_gin.ApiResponseOk(c, infra_gin.Response[po.User]{
 			Data: user,
 		})
 	})

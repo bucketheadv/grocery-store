@@ -5,6 +5,7 @@ import (
 	"github.com/bucketheadv/infra-gin"
 	"github.com/bucketheadv/infra-gin/db"
 	"github.com/sirupsen/logrus"
+	"gorm.io/gorm"
 	"grocery-store/database"
 	"grocery-store/model/po"
 	"slices"
@@ -16,21 +17,21 @@ const (
 	userPageCacheKey = "user:page:cache:%d:%d"
 )
 
-func GetUser(id int) (*po.User, error) {
+func GetUser(id int) (po.User, error) {
 	var key = fmt.Sprintf(userCacheKey, id)
-	data, err := db.FetchCache(database.RedisClient, key, 5*time.Minute, func() po.User {
+	data, err := db.FetchCache(database.RedisClient, key, 5*time.Minute, func() (po.User, error) {
 		var user po.User
 		rows, err := database.DB.Where("id = ?", id).Find(&user).Rows()
 		if err != nil {
-			panic(err)
+			return user, err
+		}
+		if !rows.Next() {
+			return user, gorm.ErrRecordNotFound
 		}
 		defer db.CloseRows(rows)
-		return user
+		return user, nil
 	})
-	if err != nil {
-		panic(err)
-	}
-	return &data, nil
+	return data, err
 }
 
 func GetUsers(ids []int) ([]po.User, error) {
@@ -81,15 +82,15 @@ func GetUsers(ids []int) ([]po.User, error) {
 
 func UserByPage(page infra_gin.Page) (infra_gin.PageResult[po.User], error) {
 	var key = fmt.Sprintf(userPageCacheKey, page.PageNo, page.PageSize)
-	data, err := db.FetchCache(database.RedisClient, key, 5*time.Minute, func() *[]po.User {
+	data, err := db.FetchCache(database.RedisClient, key, 5*time.Minute, func() (*[]po.User, error) {
 		var users *[]po.User
 		rows, err := db.Page(database.DB, page).Find(&users).Rows()
 		if err != nil {
 			logrus.Error("查询数据失败, ", err.Error())
-			return nil
+			return nil, err
 		}
 		defer db.CloseRows(rows)
-		return users
+		return users, nil
 	})
 	if err != nil {
 		panic(err)

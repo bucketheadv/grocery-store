@@ -1,4 +1,4 @@
-package model
+package po
 
 type User struct {
 	ID       int    `json:"id"`

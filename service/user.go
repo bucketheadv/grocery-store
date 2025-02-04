@@ -6,7 +6,7 @@ import (
 	"github.com/bucketheadv/infra-gin/db"
 	"github.com/sirupsen/logrus"
 	"grocery-store/database"
-	"grocery-store/database/model"
+	"grocery-store/model/po"
 	"slices"
 	"time"
 )
@@ -16,10 +16,10 @@ const (
 	userPageCacheKey = "user:page:cache:%d:%d"
 )
 
-func GetUser(id int) (*model.User, error) {
+func GetUser(id int) (*po.User, error) {
 	var key = fmt.Sprintf(userCacheKey, id)
-	data, err := db.FetchCache(database.RedisClient, key, 5*time.Minute, func() model.User {
-		var user model.User
+	data, err := db.FetchCache(database.RedisClient, key, 5*time.Minute, func() po.User {
+		var user po.User
 		rows, err := database.DB.Where("id = ?", id).Find(&user).Rows()
 		if err != nil {
 			panic(err)
@@ -33,19 +33,19 @@ func GetUser(id int) (*model.User, error) {
 	return &data, nil
 }
 
-func GetUsers(ids []int) ([]model.User, error) {
+func GetUsers(ids []int) ([]po.User, error) {
 	if len(ids) == 0 {
-		return make([]model.User, 0), nil
+		return make([]po.User, 0), nil
 	}
 
-	var result = make([]model.User, 0)
+	var result = make([]po.User, 0)
 	var missingIds = make([]int, 0)
 	var keys = make([]string, 0)
 	for _, id := range ids {
 		var key = fmt.Sprintf(userCacheKey, id)
 		keys = append(keys, key)
 	}
-	foundUsers, err := db.GetCaches[model.User](database.RedisClient, keys)
+	foundUsers, err := db.GetCaches[po.User](database.RedisClient, keys)
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +61,7 @@ func GetUsers(ids []int) ([]model.User, error) {
 	}
 
 	if len(missingIds) > 0 {
-		var users []model.User
+		var users []po.User
 		rows, err := database.DB.Where("id in (?)", missingIds).Find(&users).Rows()
 		if err != nil {
 			return nil, err
@@ -79,10 +79,10 @@ func GetUsers(ids []int) ([]model.User, error) {
 	return result, nil
 }
 
-func UserByPage(page infra_gin.Page) (infra_gin.PageResult[model.User], error) {
+func UserByPage(page infra_gin.Page) (infra_gin.PageResult[po.User], error) {
 	var key = fmt.Sprintf(userPageCacheKey, page.PageNo, page.PageSize)
-	data, err := db.FetchCache(database.RedisClient, key, 5*time.Minute, func() *[]model.User {
-		var users *[]model.User
+	data, err := db.FetchCache(database.RedisClient, key, 5*time.Minute, func() *[]po.User {
+		var users *[]po.User
 		rows, err := db.Page(database.DB, page).Find(&users).Rows()
 		if err != nil {
 			logrus.Error("查询数据失败, ", err.Error())
@@ -94,7 +94,7 @@ func UserByPage(page infra_gin.Page) (infra_gin.PageResult[model.User], error) {
 	if err != nil {
 		panic(err)
 	}
-	pageInfo := infra_gin.PageResult[model.User]{
+	pageInfo := infra_gin.PageResult[po.User]{
 		Page:    page,
 		Records: *data,
 	}

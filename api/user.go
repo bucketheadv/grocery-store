@@ -8,8 +8,8 @@ import (
 	"github.com/bucketheadv/infra-gin/components/apollo"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"grocery-store/database/model"
 	"grocery-store/initializer"
+	"grocery-store/model/po"
 	"grocery-store/service"
 	"math/rand"
 	"strconv"
@@ -20,22 +20,17 @@ func init() {
 	r := infra_gin.Engine
 	group := r.Group("/User")
 	group.GET("/GetById", func(c *gin.Context) {
-		id, success := c.GetQuery("id")
-		if !success {
-			_ = c.Error(errors.New("参数错误"))
-			return
-		}
-		idInt, err := strconv.Atoi(id)
+		id, err := infra_gin.GetQuery[int](c, "id")
 		if err != nil {
-			_ = c.Error(errors.New("参数转换错误"))
+			_ = c.Error(err)
 			return
 		}
-		user, err := service.GetUser(idInt)
+		user, err := service.GetUser(id)
 		if err != nil {
 			_ = c.Error(errors.New("查询数据失败, " + err.Error()))
 			return
 		}
-		infra_gin.ApiResponseOk(c, infra_gin.Response[*model.User]{
+		infra_gin.ApiResponseOk(c, infra_gin.Response[*po.User]{
 			Data: user,
 		})
 	})
@@ -47,7 +42,7 @@ func init() {
 			_ = c.Error(errors.New("查询用户失败, " + err.Error()))
 			return
 		}
-		infra_gin.ApiResponseOk(c, infra_gin.Response[infra_gin.PageResult[model.User]]{
+		infra_gin.ApiResponseOk(c, infra_gin.Response[infra_gin.PageResult[po.User]]{
 			Data: pageInfo,
 		})
 	})
@@ -59,7 +54,7 @@ func init() {
 			idsInt[i], _ = strconv.Atoi(id)
 		}
 		users, _ := service.GetUsers(idsInt)
-		infra_gin.ApiResponseOk(c, infra_gin.Response[[]model.User]{
+		infra_gin.ApiResponseOk(c, infra_gin.Response[[]po.User]{
 			Data: users,
 		})
 	})
@@ -80,7 +75,7 @@ func init() {
 		if err != nil {
 			logrus.Error(err)
 		}
-		infra_gin.ApiResponseOk(c, infra_gin.Response[*model.User]{
+		infra_gin.ApiResponseOk(c, infra_gin.Response[*po.User]{
 			Data: nil,
 		})
 	})

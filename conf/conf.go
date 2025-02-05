@@ -1,16 +1,16 @@
 package conf
 
 import (
+	"github.com/bucketheadv/infra-core/modules/logger"
 	"github.com/bucketheadv/infra-gin/components/apollo"
 	"github.com/bucketheadv/infra-gin/conf"
-	"github.com/sirupsen/logrus"
 )
 
 var Config conf.Conf
 
 func init() {
 	if err := conf.Parse("_conf/config.toml", &Config); err != nil {
-		logrus.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	apollo.Init(Config.Apollo, func() {

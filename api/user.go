@@ -4,15 +4,15 @@ import (
 	"errors"
 	"fmt"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
+	"github.com/bucketheadv/infra-core/basic"
+	"github.com/bucketheadv/infra-core/modules/logger"
 	"github.com/bucketheadv/infra-gin"
 	"github.com/bucketheadv/infra-gin/components/apollo"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"grocery-store/initializer"
 	"grocery-store/model/po"
 	"grocery-store/service"
 	"math/rand"
-	"strconv"
 	"strings"
 )
 
@@ -48,12 +48,13 @@ func init() {
 	})
 
 	group.GET("/QueryByIds", func(c *gin.Context) {
-		ids := strings.Split(c.Query("ids"), ",")
-		idsInt := make([]int, len(ids))
-		for i, id := range ids {
-			idsInt[i], _ = strconv.Atoi(id)
+		var p = strings.Split(c.Query("id"), ",")
+		ids, err := basic.ArrayElemTo[int](p)
+		if err != nil {
+			_ = c.Error(err)
+			return
 		}
-		users, _ := service.GetUsers(idsInt)
+		users, _ := service.GetUsers(ids)
 		infra_gin.ApiResponseOk(c, infra_gin.Response[[]po.User]{
 			Data: users,
 		})
@@ -73,10 +74,8 @@ func init() {
 			Body:  []byte(msg),
 		})
 		if err != nil {
-			logrus.Error(err)
+			logger.Error(err)
 		}
-		infra_gin.ApiResponseOk(c, infra_gin.Response[*po.User]{
-			Data: nil,
-		})
+		infra_gin.ApiResponseOk(c, infra_gin.Response[any]{})
 	})
 }

@@ -2,9 +2,9 @@ package service
 
 import (
 	"fmt"
+	"github.com/bucketheadv/infra-core/modules/logger"
 	"github.com/bucketheadv/infra-gin"
 	"github.com/bucketheadv/infra-gin/db"
-	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"grocery-store/database"
 	"grocery-store/model/po"
@@ -86,7 +86,7 @@ func UserByPage(page infra_gin.Page) (infra_gin.PageResult[po.User], error) {
 		var users *[]po.User
 		rows, err := db.Page(database.DB, page).Find(&users).Rows()
 		if err != nil {
-			logrus.Error("查询数据失败, ", err.Error())
+			logger.Error("查询数据失败, ", err.Error())
 			return nil, err
 		}
 		defer db.CloseRows(rows)

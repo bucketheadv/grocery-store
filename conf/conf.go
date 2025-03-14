@@ -1,6 +1,7 @@
 package conf
 
 import (
+	"flag"
 	"github.com/bucketheadv/infra-core/modules/logger"
 	"github.com/bucketheadv/infra-gin/components/apollo"
 	"github.com/bucketheadv/infra-gin/conf"
@@ -9,7 +10,10 @@ import (
 var Config conf.Conf
 
 func init() {
-	if err := conf.Parse("_conf/config.toml", &Config); err != nil {
+	s := flag.String("config", "_conf/config.toml", "配置文件地址")
+	flag.Parse()
+
+	if err := conf.Parse(*s, &Config); err != nil {
 		logger.Fatal(err)
 	}
 

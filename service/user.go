@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"github.com/bucketheadv/infra-core/modules/logger"
 	"github.com/bucketheadv/infra-gin"
 	"github.com/bucketheadv/infra-gin/db"
 	"gorm.io/gorm"
@@ -82,22 +81,8 @@ func GetUsers(ids []int) ([]po.User, error) {
 
 func UserByPage(page infra_gin.Page) (infra_gin.PageResult[po.User], error) {
 	var key = fmt.Sprintf(userPageCacheKey, page.PageNo, page.PageSize)
-	data, err := db.FetchCache(database.RedisClient, key, 5*time.Minute, func() (*[]po.User, error) {
-		var users *[]po.User
-		rows, err := db.Page(database.DB, page).Find(&users).Rows()
-		if err != nil {
-			logger.Error("查询数据失败, ", err.Error())
-			return nil, err
-		}
-		defer db.CloseRows(rows)
-		return users, nil
+	return db.FetchCache(database.RedisClient, key, 5*time.Minute, func() (infra_gin.PageResult[po.User], error) {
+		var tx = database.DB.Where("id > 0")
+		return db.Page[po.User](tx, page)
 	})
-	if err != nil {
-		panic(err)
-	}
-	pageInfo := infra_gin.PageResult[po.User]{
-		Page:    page,
-		Records: *data,
-	}
-	return pageInfo, nil
 }

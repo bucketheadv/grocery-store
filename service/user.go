@@ -26,7 +26,7 @@ func GetUser(id int) (domain.User, error) {
 }
 
 func GetUsers(ids []int) ([]domain.User, error) {
-	return db.GetModelCaches[domain.User](database.RedisClient, userCacheKey, ids, 1*time.Minute, func(missingIds []int) *gorm.DB {
+	return db.ModelCaches[domain.User](database.RedisClient, userCacheKey, ids, 1*time.Minute, func(missingIds []int) *gorm.DB {
 		return database.DB.Where("id IN ?", missingIds)
 	})
 }

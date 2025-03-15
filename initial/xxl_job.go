@@ -1,4 +1,4 @@
-package initializer
+package initial
 
 import (
 	"github.com/bucketheadv/infra-gin/components/xxljob"

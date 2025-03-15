@@ -9,7 +9,7 @@ import (
 	"github.com/bucketheadv/infra-gin"
 	"github.com/bucketheadv/infra-gin/components/apollo"
 	"github.com/gin-gonic/gin"
-	"grocery-store/initializer"
+	"grocery-store/initial"
 	"grocery-store/model/domain"
 	"grocery-store/service"
 	"math/rand"
@@ -69,8 +69,8 @@ func init() {
 
 	group.GET("/SendMqMsg", func(c *gin.Context) {
 		var msg = fmt.Sprintf("测试数据 %d", rand.Int())
-		_, err := initializer.RocketMQProducer.SendSync(&primitive.Message{
-			Topic: initializer.DemoTopic,
+		_, err := initial.RocketMQProducer.SendSync(&primitive.Message{
+			Topic: initial.DemoTopic,
 			Body:  []byte(msg),
 		})
 		if err != nil {

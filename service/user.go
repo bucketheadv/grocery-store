@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/bucketheadv/infra-gin"
+	"github.com/bucketheadv/infra-gin/api"
 	"github.com/bucketheadv/infra-gin/db"
 	"gorm.io/gorm"
 	"grocery-store/database"
@@ -31,9 +31,9 @@ func GetUsers(ids []int) ([]domain.User, error) {
 	})
 }
 
-func UserByPage(page infra_gin.Page) (infra_gin.PageResult[domain.User], error) {
+func UserByPage(page api.Page) (api.PageResult[domain.User], error) {
 	var key = fmt.Sprintf(userPageCacheKey, page.PageNo, page.PageSize)
-	return db.FetchCache(database.RedisClient, key, 5*time.Minute, func() (infra_gin.PageResult[domain.User], error) {
+	return db.FetchCache(database.RedisClient, key, 5*time.Minute, func() (api.PageResult[domain.User], error) {
 		return db.Page[domain.User](database.DB, page)
 	})
 }

@@ -5,7 +5,7 @@ go 1.23.4
 require (
 	github.com/apache/rocketmq-client-go/v2 v2.1.2
 	github.com/bucketheadv/infra-core v0.0.9
-	github.com/bucketheadv/infra-gin v0.1.31
+	github.com/bucketheadv/infra-gin v0.1.33
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/shopspring/decimal v1.4.0

@@ -9,3 +9,7 @@ type User struct {
 func (User) TableName() string {
 	return "user"
 }
+
+func (u User) GetID() int {
+	return u.ID
+}

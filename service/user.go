@@ -7,7 +7,6 @@ import (
 	"gorm.io/gorm"
 	"grocery-store/database"
 	"grocery-store/model/po"
-	"slices"
 	"time"
 )
 
@@ -18,71 +17,23 @@ const (
 
 func GetUser(id int) (po.User, error) {
 	var key = fmt.Sprintf(userCacheKey, id)
-	data, err := db.FetchCache(database.RedisClient, key, 5*time.Minute, func() (po.User, error) {
+	data, err := db.FetchCache(database.RedisClient, key, 1*time.Minute, func() (po.User, error) {
 		var user po.User
-		rows, err := database.DB.Where("id = ?", id).Find(&user).Rows()
-		if err != nil {
-			return user, err
-		}
-		if !rows.Next() {
-			return user, gorm.ErrRecordNotFound
-		}
-		defer db.CloseRows(rows)
+		database.DB.Where("id = ?", id).Find(&user)
 		return user, nil
 	})
 	return data, err
 }
 
 func GetUsers(ids []int) ([]po.User, error) {
-	if len(ids) == 0 {
-		return make([]po.User, 0), nil
-	}
-
-	var result = make([]po.User, 0)
-	var missingIds = make([]int, 0)
-	var keys = make([]string, 0)
-	for _, id := range ids {
-		var key = fmt.Sprintf(userCacheKey, id)
-		keys = append(keys, key)
-	}
-	foundUsers, err := db.GetCaches[po.User](database.RedisClient, keys)
-	if err != nil {
-		panic(err)
-	}
-	var foundUserIds = make([]int, 0)
-	for _, u := range foundUsers {
-		foundUserIds = append(foundUserIds, u.ID)
-		result = append(result, u)
-	}
-	for _, id := range ids {
-		if !slices.Contains(foundUserIds, id) {
-			missingIds = append(missingIds, id)
-		}
-	}
-
-	if len(missingIds) > 0 {
-		var users []po.User
-		rows, err := database.DB.Where("id in (?)", missingIds).Find(&users).Rows()
-		if err != nil {
-			return nil, err
-		}
-		defer db.CloseRows(rows)
-		for _, user := range users {
-			var key = fmt.Sprintf(userCacheKey, user.ID)
-			err := db.SetCache(database.RedisClient, key, user, 5*time.Minute)
-			if err != nil {
-				panic(err)
-			}
-			result = append(result, user)
-		}
-	}
-	return result, nil
+	return db.GetModelCaches[po.User](database.RedisClient, userCacheKey, ids, 1*time.Minute, func(missingIds []int) *gorm.DB {
+		return database.DB.Where("id IN ?", missingIds)
+	})
 }
 
 func UserByPage(page infra_gin.Page) (infra_gin.PageResult[po.User], error) {
 	var key = fmt.Sprintf(userPageCacheKey, page.PageNo, page.PageSize)
 	return db.FetchCache(database.RedisClient, key, 5*time.Minute, func() (infra_gin.PageResult[po.User], error) {
-		var tx = database.DB.Where("id > 0")
-		return db.Page[po.User](tx, page)
+		return db.Page[po.User](database.DB, page)
 	})
 }

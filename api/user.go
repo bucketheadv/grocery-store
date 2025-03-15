@@ -10,7 +10,7 @@ import (
 	"github.com/bucketheadv/infra-gin/components/apollo"
 	"github.com/gin-gonic/gin"
 	"grocery-store/initializer"
-	"grocery-store/model/po"
+	"grocery-store/model/domain"
 	"grocery-store/service"
 	"math/rand"
 	"strings"
@@ -30,7 +30,7 @@ func init() {
 			_ = c.Error(errors.New("查询数据失败, " + err.Error()))
 			return
 		}
-		infra_gin.ApiResponseOk(c, infra_gin.Response[po.User]{
+		infra_gin.ApiResponseOk(c, infra_gin.Response[domain.User]{
 			Data: user,
 		})
 	})
@@ -42,7 +42,7 @@ func init() {
 			_ = c.Error(errors.New("查询用户失败, " + err.Error()))
 			return
 		}
-		infra_gin.ApiResponseOk(c, infra_gin.Response[infra_gin.PageResult[po.User]]{
+		infra_gin.ApiResponseOk(c, infra_gin.Response[infra_gin.PageResult[domain.User]]{
 			Data: pageInfo,
 		})
 	})
@@ -55,7 +55,7 @@ func init() {
 			return
 		}
 		users, _ := service.GetUsers(ids)
-		infra_gin.ApiResponseOk(c, infra_gin.Response[[]po.User]{
+		infra_gin.ApiResponseOk(c, infra_gin.Response[[]domain.User]{
 			Data: users,
 		})
 	})

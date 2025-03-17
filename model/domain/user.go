@@ -3,6 +3,7 @@ package domain
 type User struct {
 	ID         int64  `json:"id"`
 	Username   string `json:"username"`
+	Password   string `json:"password"`
 	Age        int    `json:"age,omitempty"`
 	CreateTime string `json:"create_time,omitempty"`
 	UpdateTime string `json:"update_time,omitempty"`

@@ -3,19 +3,16 @@ package main
 import (
 	"fmt"
 	"github.com/bucketheadv/infra-core/modules/logger"
-	"github.com/bucketheadv/infra-gin"
 	"go.uber.org/zap"
 	_ "grocery-store/api"
 	"grocery-store/conf"
 	_ "grocery-store/consumer"
+	"grocery-store/initial"
 	_ "grocery-store/job"
 )
 
-//TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
-// the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
-
 func main() {
-	r := infra_gin.Engine
+	r := initial.Engine
 	logger.InitWithConfig(logger.Config{
 		InfoLogPath:  "log/info.log",
 		ErrorLogPath: "log/error.log",

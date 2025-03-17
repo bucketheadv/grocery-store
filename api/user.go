@@ -5,7 +5,6 @@ import (
 	"github.com/apache/rocketmq-client-go/v2/primitive"
 	"github.com/bucketheadv/infra-core/basic"
 	"github.com/bucketheadv/infra-core/modules/logger"
-	"github.com/bucketheadv/infra-gin"
 	"github.com/bucketheadv/infra-gin/api"
 	"github.com/bucketheadv/infra-gin/components/apollo"
 	"github.com/gin-gonic/gin"
@@ -18,7 +17,7 @@ import (
 )
 
 func init() {
-	r := infra_gin.Engine
+	r := initial.Engine
 	group := r.Group("/User")
 	group.GET("/GetById", func(c *gin.Context) {
 		id, err := api.GetQuery[int](c, "id")

@@ -37,3 +37,9 @@ func UserByPage(page api.Page) (api.PageResult[domain.User], error) {
 		return db.Page[domain.User](database.DB, page)
 	})
 }
+
+func GetUserByUsername(username string) (domain.User, error) {
+	var user domain.User
+	err := database.DB.Where("username = ?", username).Find(&user).Error
+	return user, err
+}

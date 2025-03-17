@@ -1,6 +1,7 @@
 create table `user_info` (
     id int(11) not null primary key auto_increment,
     username varchar(64) not null comment '用户名',
+    password varchar(64) not null comment '密码',
     age int(4) not null default -1 comment '年龄',
     created_time timestamp not null default current_timestamp comment '创建时间',
     updated_time timestamp not null default current_timestamp on update current_timestamp comment '更新时间',

@@ -50,7 +50,7 @@ func init() {
 
 	group.GET("/QueryByIds", func(c *gin.Context) {
 		var p = strings.Split(c.Query("id"), ",")
-		ids, err := basic.ArrayElemTo[int](p)
+		ids, err := basic.ArrayElemTo[int64](p)
 		if err != nil {
 			_ = c.Error(err)
 			return

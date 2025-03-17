@@ -1,15 +1,17 @@
 package domain
 
 type User struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Age      int    `json:"age,omitempty"`
+	ID         int64  `json:"id"`
+	Username   string `json:"username"`
+	Age        int    `json:"age,omitempty"`
+	CreateTime string `json:"create_time,omitempty"`
+	UpdateTime string `json:"update_time,omitempty"`
 }
 
 func (User) TableName() string {
-	return "user"
+	return "user_info"
 }
 
-func (u User) GetID() int {
+func (u User) GetID() int64 {
 	return u.ID
 }

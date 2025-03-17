@@ -19,14 +19,14 @@ func GetUser(id int) (domain.User, error) {
 	var key = fmt.Sprintf(userCacheKey, id)
 	data, err := db.FetchCache(database.RedisClient, key, 1*time.Minute, func() (domain.User, error) {
 		var user domain.User
-		database.DB.Where("id = ?", id).Find(&user)
-		return user, nil
+		var err = database.DB.Where("id = ?", id).Find(&user).Error
+		return user, err
 	})
 	return data, err
 }
 
-func GetUsers(ids []int) ([]domain.User, error) {
-	return db.ModelCaches[domain.User](database.RedisClient, userCacheKey, ids, 1*time.Minute, func(missingIds []int) *gorm.DB {
+func GetUsers(ids []int64) ([]domain.User, error) {
+	return db.ModelCaches[domain.User](database.RedisClient, userCacheKey, ids, 1*time.Minute, func(missingIds []int64) *gorm.DB {
 		return database.DB.Where("id IN ?", missingIds)
 	})
 }

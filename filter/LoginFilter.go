@@ -6,9 +6,12 @@ import (
 	"net/http"
 )
 
+var whiteList = []string{
+	"/Admin/Auth/Login",
+}
+
 func LoginFilter() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var whiteList = []string{"/Admin/Auth/Login"}
 		for _, p := range whiteList {
 			if p == c.Request.URL.Path {
 				break
